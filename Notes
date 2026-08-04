@@ -1,0 +1,27 @@
+/mon-projet
+  /frontend               → React (Vite recommandé, plus léger que CRA)
+    /src
+      /features           → organisé par domaine, pas par type de fichier
+        /search
+        /artisan-profile
+        /booking           → le plus complexe (choix créneau, confirmation)
+        /pro-dashboard
+        /admin
+      /components          → composants UI partagés
+      /api                 → clients HTTP vers l'API Go
+
+  /backend                 → Go
+    /cmd/server            → point d'entrée
+    /internal
+      /artisans
+      /bookings            → module le plus sensible, logique de créneaux
+      /reviews
+      /auth                → sessions opaques
+      /notifications       → email/SMS async
+      /payments            → Stripe Billing
+    /migrations            → schéma PostgreSQL (via ex. golang-migrate)
+
+  docker-compose.yml
+  CLAUDE.md                → contexte projet pour Claude Code
+
+C'est la structure du code selon Claude je la laisse la pour le moment
