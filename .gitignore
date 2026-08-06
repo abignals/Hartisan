@@ -1,2 +1,29 @@
+# ─── Secrets ──────────────────────────────────────────────
 .env
+.env.*
+!.env.example
+
+# ─── Certificats et clés ──────────────────────────────────
 nginx/certs/
+*.pem
+*.key
+*.crt
+*.p12
+
+# ─── Backend Go ───────────────────────────────────────────
+/backend/server
+*.exe
+*.test
+*.out
+
+# ─── Docker ───────────────────────────────────────────────
+docker-compose.override.yml
+
+# ─── Système et éditeurs ──────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*~
+*.bak
+
+.vscode
