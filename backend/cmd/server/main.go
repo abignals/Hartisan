@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"os"
 	"fmt"
+	"encoding/json"
+	"github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type registerRequest struct {
@@ -13,15 +16,14 @@ type registerRequest struct {
     Password string `json:"password"`
 }
 
-func registerHandler(w http.ResponseWriter, r *http.Request)
-{
+func registerHandler(w http.ResponseWriter, r *http.Request) {
 	var req registerRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, `{"error":"corps de requete invalide"}`, http.StatusBadRequest)
 		return
 	}
 
-	if req.Email == "" || req.password == "" {
+	if req.Email == "" || req.Password == "" {
 		http.Error(w, `{"error":"email et password requis"}`, http.StatusBadRequest)
 		return
 	}
@@ -40,7 +42,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request)
 
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
-			http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
+			http.Error(w, `{"error":"cet email est deja utilise"}`, http.StatusConflict)
 			return
 		}
 		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
@@ -67,6 +69,9 @@ func main() {
 	mux.HandleFunc("GET /health", func (w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte (`{"status":"ok"}`))
 	})
+
+	mux.HandleFunc("POST /api/register", registerHandler)
+	mux.HandleFunc("POST /api/login", loginHandler)
 	
 	mux.HandleFunc("GET /api/db-test", func(w http.ResponseWriter, r *http.Request) {
 		var now string
