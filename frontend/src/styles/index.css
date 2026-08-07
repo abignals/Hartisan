@@ -646,3 +646,68 @@ button, input { font: inherit; color: inherit; }
 }
 
 .auth__switch a { color: var(--blue); }
+
+/* ---- Choix du role ---- */
+.roles {
+  border: 0;
+  padding: 0;
+  margin: 0 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.roles .field__label { grid-column: 1 / -1; }
+
+.role input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.role__box {
+  display: block;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+
+.role__box:hover { background: var(--blue-tint); }
+
+.role input:checked + .role__box {
+  border-color: var(--blue);
+  background: var(--blue-light);
+}
+
+.role input:focus-visible + .role__box {
+  box-shadow: 0 0 0 3px var(--blue-light);
+}
+
+.role__titre {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.role__texte {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+/* ---- Ligne a deux champs ---- */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 420px) {
+  .roles, .field-row { grid-template-columns: 1fr; }
+}
+

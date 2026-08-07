@@ -6,53 +6,7 @@ import (
 	"net/http"
 	"os"
 	"fmt"
-	"encoding/json"
-	"github.com/lib/pq"
-	"golang.org/x/crypto/bcrypt"
 )
-
-type registerRequest struct {
-    Email    string `json:"email"`
-    Password string `json:"password"`
-}
-
-func registerHandler(w http.ResponseWriter, r *http.Request) {
-	var req registerRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, `{"error":"corps de requete invalide"}`, http.StatusBadRequest)
-		return
-	}
-
-	if req.Email == "" || req.Password == "" {
-		http.Error(w, `{"error":"email et password requis"}`, http.StatusBadRequest)
-		return
-	}
-	
-	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	if err != nil {
-		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
-		return
-	}
-
-	var id int
-	err = db.DB.QueryRow(
-		"INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id",
-		req.Email, string(hash),
-	).Scan(&id)
-
-	if err != nil {
-		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
-			http.Error(w, `{"error":"cet email est deja utilise"}`, http.StatusConflict)
-			return
-		}
-		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(fmt.Sprintf(`{"id":%d,"email":"%s"}`, id, req.Email)))
-}
 
 func main() {
 	port := os.Getenv("PORT")

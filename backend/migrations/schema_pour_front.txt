@@ -20,7 +20,7 @@ CREATE TABLE users (
     password_hash   TEXT        NOT NULL,          -- argon2id ou bcrypt
     first_name      TEXT        NOT NULL,
     last_name       TEXT        NOT NULL,
-    phone           TEXT,       NOT NULL,
+    phone           TEXT,       NOT NULL UNIQUE,
     email_verified_at TIMESTAMPTZ,
     -- suspension immédiate (litige, fraude) sans supprimer le compte
     suspended_at    TIMESTAMPTZ,

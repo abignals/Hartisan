@@ -1,13 +1,16 @@
 package main
 
+
 import (
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"net/http"
 	"time"
-	"golang.org/x/crypto/bcrypt"
+
 	"docto/db"
-	"encoding/json"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type loginRequest struct {
@@ -40,40 +43,30 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	err = db.DB.QueryRow("SELECT id, password_hash FROM users WHERE email = $1", req.Email,).Scan(&userID, &passwordHash)
 
 	//Error management
+	rawToken, err := generateSessionToken()
 	if err != nil {
-		http.Error(w, `{"error":"email invalide"}`, http.StatusUnauthorized)
+		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
 		return
 	}
+	tokenHash := hashToken(rawToken)
 
-	passwordErr := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(req.Password))
-	if passwordErr != nil {
-		http.Error(w, `{"error":"mot de passe invalide"}`, http.StatusUnauthorized)
-		return
-	}
-
-	sessionID, err := generateSessionID()
+	expiresAt := time.Now().Add(24 * time.Hour)
+	_, err = db.DB.Exec(
+		"INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ($1, $2, $3)",
+		tokenHash, userID, expiresAt,
+	)
 	if err != nil {
 		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
 		return
 	}
 
-	//Enregistrer la session dans la DB
-	expiresAt := time.Now().Add(time.Minute)
-	_, err = db.DB.Exec("INSERT INTO sessions (id, user_id, expires_at) VALUES ($1, $2, $3)", sessionID, userID, expiresAt, )
-
-	if err  != nil {
-		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
-		return
-	}
-
-	//Envoi des infos de session au navigateur sous forme de cookie
 	http.SetCookie(w, &http.Cookie{
-		Name:		"session_id",
-		Value:		sessionID,
-		HttpOnly:	true,
-		Path:		"/",
-		Expires:	expiresAt,
-		SameSite:	http.SameSiteLaxMode,
+		Name:     "session_id",
+		Value:    rawToken,
+		HttpOnly: true,
+		Path:     "/",
+		Expires:  expiresAt,
+		SameSite: http.SameSiteLaxMode,
 	})
 
 	w.Header().Set("Content-Type", "application/json")
