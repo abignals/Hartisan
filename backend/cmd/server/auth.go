@@ -7,31 +7,25 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+	"net"
 
 	"docto/db"
-	//"golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type loginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email		string `json:"email"`
+	Password	string `json:"password"`
+	Role		string `json:"role"`
 }
 
-func generateSessionID() (string, error) {
+func generateSessionToken() (string, error) {
 	randomBytes := make([]byte, 32)
 	//filling "randomBytes" with : random bytes :D
 	if _, err := rand.Read(randomBytes); err != nil {
 		return "", err
 	}
 	//encoder les octets (illisible) en texte utilisable dans un cookie/URL
-	return base64.URLEncoding.EncodeToString(randomBytes), nil
-}
-
-func generateSessionToken() (string, error) {
-	randomBytes := make([]byte, 32)
-	if _, err := rand.Read(randomBytes); err != nil {
-		return "", err
-	}
 	return base64.URLEncoding.EncodeToString(randomBytes), nil
 }
 
@@ -50,9 +44,19 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Cherche le USER dans la base selon son ID
-	var userID int
+	var userID string
 	var passwordHash string
-	err = db.DB.QueryRow("SELECT id, password_hash FROM users WHERE email = $1", req.Email,).Scan(&userID, &passwordHash)
+	var role string
+	err = db.DB.QueryRow("SELECT id, password_hash, role FROM users WHERE email = $1", req.Email,).Scan(&userID, &passwordHash, &role)
+	if err != nil {
+		http.Error(w, `{"error":"email n'exsite pas"}`, http.StatusUnauthorized)
+		return
+	}
+
+	if req.Role != role {
+	http.Error(w, `{"error":"role invalide pour ce compte"}`, http.StatusUnauthorized)
+	return
+}
 
 	//Error management
 	rawToken, err := generateSessionToken()
@@ -62,10 +66,22 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tokenHash := hashToken(rawToken)
 
+	if err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(req.Password)); err != nil {
+    	http.Error(w, `{"error":"Mot de passe invalide"}`, http.StatusUnauthorized)
+    	return
+	}
+
+	userAgent := r.UserAgent()
+
+	ipAddress, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		ipAddress = r.RemoteAddr // fallback si pas de port dans l'adresse
+	}
+
 	expiresAt := time.Now().Add(24 * time.Hour)
 	_, err = db.DB.Exec(
-		"INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ($1, $2, $3)",
-		tokenHash, userID, expiresAt,
+		"INSERT INTO sessions (token_hash, user_id, user_agent, ip_address, expires_at) VALUES ($1, $2, $3, $4, $5)",
+		tokenHash, userID, userAgent, ipAddress, expiresAt,
 	)
 	if err != nil {
 		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
@@ -82,5 +98,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"status":"connecte"}`))
+	json.NewEncoder(w).Encode(map[string]string{
+		"status": "connecte",
+		"role":   role,
+	})
 }

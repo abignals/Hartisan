@@ -8,6 +8,10 @@ import (
 	"fmt"
 )
 
+//func test
+
+
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -26,6 +30,14 @@ func main() {
 
 	mux.HandleFunc("POST /api/register", registerHandler)
 	mux.HandleFunc("POST /api/login", loginHandler)
+	mux.HandleFunc("GET /api/me", exigeAuth(meHandler))
+	mux.HandleFunc("POST /api/logout", logoutHandler)
+	// mux.HandleFunc("POST /api/artisan/profile", exigeRole("artisan", artisanProfileHandler))
+
+	//a peut etre enlever
+	mux.HandleFunc("GET /api/trades", tradesHandler)
+	mux.HandleFunc("GET /api/artisan/profile", exigeRole("artisan", artisanProfileGet))
+	mux.HandleFunc("PUT /api/artisan/profile", exigeRole("artisan", artisanProfilePut))
 	
 	mux.HandleFunc("GET /api/db-test", func(w http.ResponseWriter, r *http.Request) {
 		var now string

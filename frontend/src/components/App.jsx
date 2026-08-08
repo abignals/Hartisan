@@ -1,5 +1,6 @@
 import { IconeLieu, IconeLoupe } from './Icone.jsx'
 import '../styles/index.css'
+import Entete from './Entete.jsx'
 
 const METIERS = [
     { nom: 'Plombiers'},
@@ -29,22 +30,7 @@ const initiales = (nom) =>
 export default function App() {
   return (
     <>
-      <header className="header">
-        <div className="container header__inner">
-          <a className="logo" href="/">docto</a>
-
-          <nav className="nav">
-            <a className="nav__link" href="/recherche">Trouver un artisan</a>
-            <a className="nav__link" href="/metiers">Métiers</a>
-            <a className="nav__link" href="/pro">Vous êtes artisan ?</a>
-          </nav>
-
-          <div className="header__actions">
-            <a className="btn btn--ghost" href="/connexion">Connexion</a>
-            <a className="btn btn--primary" href="/inscription">Inscription</a>
-          </div>
-        </div>
-      </header>
+      <Entete />
 
       <main>
         {/* ---- Accroche + recherche ---- */}

@@ -8,6 +8,11 @@ const CHAMPS_VIDES = {
   phone: '',
   password: '',
   passwordConfirm: '',
+  //artisan
+  companyName: '',
+  addressLine: '',
+  postalCode: '',
+  city: '',
 }
 
 export default function Inscription() {
@@ -36,18 +41,26 @@ export default function Inscription() {
 
         setEnvoi(true)
         try {
+            const corps = {
+                role: form.role,
+                first_name: form.firstName.trim(),
+                last_name: form.lastName.trim(),
+                email: form.email.trim(),
+                phone: form.phone.trim(),
+                password: form.password,
+            }
+            if (form.role === 'artisan') {
+                corps.company_name = form.companyName.trim()
+                corps.address_line = form.addressLine.trim()
+                corps.postal_code = form.postalCode.trim()
+                corps.city = form.city.trim()
+            }
+
             const res = await fetch('/api/register', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'same-origin',
-                body: JSON.stringify({
-                    role: form.role,
-                    first_name: form.firstName.trim(),
-                    last_name: form.lastName.trim(),
-                    email: form.email.trim(),
-                    phone: form.phone.trim(),
-                    password: form.password,
-                }),
+                body: JSON.stringify(corps),
             })
 
             if (!res.ok) {
@@ -55,11 +68,8 @@ export default function Inscription() {
                 setErreur(data.error ?? 'Inscription impossible')
                 return
             }
+        
 
-            if (form.role === 'artisan') {
-                window.location.href = '/pro/profil'
-                return
-            }
             setSucces(true)
         }   catch {
             setErreur('Serveur injoignable')
@@ -173,6 +183,65 @@ export default function Inscription() {
                         onChange={handleChange}
                     />
                 </label>
+
+                {form.role === 'artisan' && (
+                    <>
+                        <label className="field">
+                            <span className="field__label">Nom de l'entreprise</span>
+                            <input
+                                className="field__input"
+                                type="text"
+                                name="companyName"
+                                autoComplete='organization'
+                                required
+                                value={form.companyName}
+                                onChange={handleChange}
+                            />
+                        </label>
+
+                        <label className="field">
+                            <span className="field__label">Adresse</span>
+                            <input
+                                className="field__input"
+                                type="text"
+                                name="addressLine"
+                                autoComplete='street-address'
+                                placeholder='1 rue des lilas'
+                                value={form.addressLine}
+                                onChange={handleChange}
+                            />
+                        </label>
+
+                        <div className="field-row">
+                            <label className="field">
+                                <span className="field__label">Code Postal</span>
+                                <input
+                                    className='field__input'
+                                    type='text'
+                                    name='postalCode'
+                                    autoComplete='postal-code'
+                                    inputMode="numeric"
+                                    required
+                                    value={form.postalCode}
+                                    onChange={handleChange}
+                                />
+                            </label>
+
+                            <label className="field">
+                                <span className="field__label">Ville</span>
+                                <input
+                                    className="field__input"
+                                    type="text"
+                                    name="city"
+                                    autoComplete="address-level2"
+                                    required
+                                    value={form.city}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                        </div>
+                    </>
+                )}
 
                 <label className="field">
                     <span className="field__label">Mot de passe</span>

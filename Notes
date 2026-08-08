@@ -33,3 +33,4 @@ J'ai change l'image de la DB pour include PostGis, on pourra revenir en arriere 
 2 Erreurs fix :
   1. dans register.go on utilise plus un int mais une string (ou un uuid.UUID mais il faut include github.com/google/uuid)
   2. j'ai remonte password parce que meme si il faisait moins de 8 char ca enrengistrait quand meme en DB
+

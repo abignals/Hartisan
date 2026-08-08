@@ -10,17 +10,23 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type registerRequest struct {
+type registerRequestUser struct {
     Email		string	`json:"email"`
     Password	string	`json:"password"`
 	FirstName	string	`json:"first_name"`
 	LastName	string	`json:"last_name"`
 	Phone		string	`json:"phone"`
 	Role		string	`json:"role"`
+
+	// Si Role = artisan
+	CompanyName string `json:"company_name"`
+	AddressLine string `json:"address_line"`
+	PostalCode  string `json:"postal_code"`
+	City        string `json:"city"`
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
-	var req registerRequest
+	var req registerRequestUser
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, `{"error":"corps de requete invalide"}`, http.StatusBadRequest)
 		return
@@ -51,15 +57,29 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.Role == "artisan" {
+		if req.CompanyName == "" || req.PostalCode == "" || req.City == "" || req.AddressLine == ""{
+			http.Error(w, `{"error":"nom d'entreprise, code postal et ville requis pour un artisan"}`, http.StatusBadRequest)
+			return
+		}
+	}
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
 		return
 	}
 
-	var id string
+	// On ouvre une transaction : soit tout réussit (user + profil artisan), soit rien n'est enregistré
+	tx, err := db.DB.Begin()
+	if err != nil {
+		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
+		return
+	}
+	defer tx.Rollback()
 
-	err = db.DB.QueryRow(
+	var id string
+	err = tx.QueryRow(
 		`INSERT INTO users (email, password_hash, first_name, last_name, phone, role)
 		 VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
 		req.Email, string(hash), req.FirstName, req.LastName, req.Phone, req.Role,
@@ -82,7 +102,25 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.Role == "artisan" {
+		// Remplacer (0,0) par les vraies coordonnées une fois la géoloc added
+		_, err = tx.Exec(
+			`INSERT INTO artisan_profiles (user_id, company_name, address_line, postal_code, city, location)
+			 VALUES ($1, $2, $3, $4, $5, ST_SetSRID(ST_MakePoint(0, 0), 4326)::geography)`,
+			id, req.CompanyName, req.AddressLine, req.PostalCode, req.City,
+		)
+		if err != nil {
+			http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(fmt.Sprintf(`{"id":%d,"email":"%s"}`, id, req.Email)))
+	w.Write([]byte(fmt.Sprintf(`{"id":"%s","email":"%s"}`, id, req.Email)))
 }
