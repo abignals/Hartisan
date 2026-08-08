@@ -46,13 +46,18 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(req.Password) < 8 {
+		http.Error(w, `{"error":"le mot de passe doit contenir au moins 8 caracteres"}`, http.StatusBadRequest)
+		return
+	}
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
 		return
 	}
 
-	var id int
+	var id string
 
 	err = db.DB.QueryRow(
 		`INSERT INTO users (email, password_hash, first_name, last_name, phone, role)
@@ -74,11 +79,6 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
-		return
-	}
-
-	if len(req.Password) < 8 {
-		http.Error(w, `{"error":"le mot de passe doit contenir au moins 8 caracteres"}`, http.StatusBadRequest)
 		return
 	}
 

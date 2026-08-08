@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"crypto/rand"
 	"crypto/sha256"
@@ -10,7 +9,7 @@ import (
 	"time"
 
 	"docto/db"
-	"golang.org/x/crypto/bcrypt"
+	//"golang.org/x/crypto/bcrypt"
 )
 
 type loginRequest struct {
@@ -26,6 +25,19 @@ func generateSessionID() (string, error) {
 	}
 	//encoder les octets (illisible) en texte utilisable dans un cookie/URL
 	return base64.URLEncoding.EncodeToString(randomBytes), nil
+}
+
+func generateSessionToken() (string, error) {
+	randomBytes := make([]byte, 32)
+	if _, err := rand.Read(randomBytes); err != nil {
+		return "", err
+	}
+	return base64.URLEncoding.EncodeToString(randomBytes), nil
+}
+
+func hashToken(token string) string {
+	sum := sha256.Sum256([]byte(token))
+	return base64.URLEncoding.EncodeToString(sum[:])
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
