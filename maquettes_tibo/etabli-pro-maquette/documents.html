@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documents — L'Établi Pro</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="planning.html" class="brand">
+    <span class="brand-mark">É</span>
+    <span class="brand-name">L'Établi</span>
+    <span class="pro-tag">Espace pro</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="planning.html">Emploi du temps</a></li>
+    <li><a href="messages.html">Messages</a></li>
+    <li><a href="documents.html" class="active">Documents</a></li>
+    <li><a href="profil.html">Profil</a></li>
+  </ul>
+  <div class="nav-user">MR</div>
+</nav>
+
+<div class="page">
+  <div class="page-head">
+    <p class="eyebrow">Devis &amp; factures</p>
+    <h1>Documents</h1>
+    <p>Déposez un devis ou une facture pour un client — il devra l'approuver pour que l'intervention soit confirmée.</p>
+  </div>
+
+  <div class="dropzone">
+    <span class="glyph">📎</span>
+    <strong>Déposer un document</strong>
+    <p>Glissez un fichier ici, ou choisissez-le manuellement (PDF, JPG, PNG).</p>
+    <div class="dropzone-controls">
+      <select>
+        <option>Assigner à : Camille Vasseur</option>
+        <option>Assigner à : Nadia Ferreira</option>
+        <option>Assigner à : Julien Mercier</option>
+      </select>
+      <button type="button" class="dropzone-btn">Choisir un fichier</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button type="button" class="active" data-tab="current" onclick="showGroup('current')">Clients en cours</button>
+    <button type="button" data-tab="history" onclick="showGroup('history')">Historique</button>
+  </div>
+
+  <!-- ============ EN COURS ============ -->
+  <div id="group-current">
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">CV</div>
+        <div><span class="name">Camille Vasseur</span> — <span class="role">Lundi 8h–10h, disjoncteurs</span></div>
+      </div>
+
+      <div class="doc-row-pro">
+        <span class="date">14 mars</span>
+        <div>
+          <div class="doc-title">Devis — remplacement disjoncteurs</div>
+          <div class="doc-type">180 €</div>
+        </div>
+        <span class="badge-type badge-devis">Devis</span>
+        <span class="stamp confirmed">Approuvé</span>
+        <a href="#" class="pill-link danger">Supprimer</a>
+      </div>
+
+      <div class="doc-row-pro">
+        <span class="date">2 févr.</span>
+        <div>
+          <div class="doc-title">Facture — mise aux normes tableau</div>
+          <div class="doc-type">420 €</div>
+        </div>
+        <span class="badge-type badge-facture">Facture</span>
+        <span class="stamp confirmed">Réglée</span>
+        <a href="#" class="pill-link danger">Supprimer</a>
+      </div>
+    </div>
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">NF</div>
+        <div><span class="name">Nadia Ferreira</span> — <span class="role">Devis rénovation en attente</span></div>
+      </div>
+
+      <div class="doc-row-pro">
+        <span class="date">9 mars</span>
+        <div>
+          <div class="doc-title">Devis — rénovation électrique complète</div>
+          <div class="doc-type">3 100 €</div>
+        </div>
+        <span class="badge-type badge-devis">Devis</span>
+        <span class="stamp pending">En attente d'approbation</span>
+        <a href="#" class="pill-link danger">Supprimer</a>
+      </div>
+    </div>
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">JM</div>
+        <div><span class="name">Julien Mercier</span> — <span class="role">Suite à l'urgence du 11 mars</span></div>
+      </div>
+
+      <div class="doc-row-pro">
+        <span class="date">11 mars</span>
+        <div>
+          <div class="doc-title">Facture — dépannage panne totale</div>
+          <div class="doc-type">150 €</div>
+        </div>
+        <span class="badge-type badge-facture">Facture</span>
+        <span class="stamp confirmed">Réglée</span>
+        <a href="#" class="pill-link danger">Supprimer</a>
+      </div>
+
+      <div class="doc-row-pro">
+        <span class="date">11 mars</span>
+        <div>
+          <div class="doc-title">Devis — mise aux normes</div>
+          <div class="doc-type">890 €</div>
+        </div>
+        <span class="badge-type badge-devis">Devis</span>
+        <span class="stamp pending">En attente d'approbation</span>
+        <a href="#" class="pill-link danger">Supprimer</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ HISTORIQUE ============ -->
+  <div id="group-history" style="display:none;">
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">JD</div>
+        <div><span class="name">Julien Da Costa</span> — <span class="role">Chantier clos</span></div>
+      </div>
+
+      <div class="doc-row-pro">
+        <span class="date">2 févr.</span>
+        <div>
+          <div class="doc-title">Devis — mise aux normes (non donné suite)</div>
+          <div class="doc-type">—</div>
+        </div>
+        <span class="badge-type badge-devis">Devis</span>
+        <span class="stamp none">Refusé</span>
+        <a href="#" class="pill-link danger">Supprimer</a>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="note" style="margin-top:24px;">Statuts visibles d'un coup d'œil : vert = approuvé/réglé par le client, ambre = en attente de sa validation, rouge = refusé. Tant qu'un devis n'est pas approuvé, l'intervention correspondante reste provisoire dans l'emploi du temps.</p>
+</div>
+
+<div class="mockup-flag">Maquette — nav du haut + onglets cliquables</div>
+
+<script>
+function showGroup(group){
+  document.getElementById('group-current').style.display = group === 'current' ? 'block' : 'none';
+  document.getElementById('group-history').style.display = group === 'history' ? 'block' : 'none';
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.classList.toggle('active', b.dataset.tab === group);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,4 +1,5 @@
-import { use, useState } from 'react'
+import { useState } from 'react'
+import '../styles/etabli.css'
 
 const CHAMPS_VIDES = {
   role: 'client',
@@ -13,6 +14,18 @@ const CHAMPS_VIDES = {
   addressLine: '',
   postalCode: '',
   city: '',
+}
+
+function Entete() {
+  return (
+    <div className="auth-top">
+      <a href="/" className="brand">
+        <span className="brand-mark">É</span>
+        <span className="brand-name">L'Établi</span>
+        <span className="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
+      </a>
+    </div>
+  )
 }
 
 export default function Inscription() {
@@ -68,7 +81,6 @@ export default function Inscription() {
                 setErreur(data.error ?? 'Inscription impossible')
                 return
             }
-        
 
             setSucces(true)
         }   catch {
@@ -80,205 +92,222 @@ export default function Inscription() {
 
     if (succes) {
         return (
-            <main className="auth">
-                <div className='auth__card'>
-                    <h1 className='auth__title'>Compte cree</h1>
-                    <p className='auth__lead'>Vous pouvez maintenant vous connecter.</p>
-                    <a className="btn btn--primary btn--block" href="/connexion">Se connecter</a>
+            <div className="etb">
+                <Entete />
+                <div className="auth-shell">
+                    <div className="auth-card">
+                        <span className="stamp confirmed">Compte créé</span>
+                        <h1>Bienvenue</h1>
+                        <p className="auth-lead">
+                            Votre compte est enregistré. Vous pouvez maintenant vous connecter.
+                        </p>
+                        <a className="btn btn-primary btn-block" href="/connexion">Se connecter</a>
+                    </div>
                 </div>
-            </main>
+            </div>
         )
     }
 
     return (
-        <main className="auth">
-            <form className="auth__card" onSubmit={handleSubmit}>
-                <h1 className="auth__title">Inscription</h1>
-                <p className="auth__lead">Creez votre compte en quelques secondes.</p>
+        <div className="etb">
+            <Entete />
 
-                {erreur && <p className='auth__error' role="alert">{erreur}</p>}
+            <div className="auth-shell">
+                <form className="auth-card wide" onSubmit={handleSubmit}>
+                    <p className="eyebrow">Créer un compte</p>
+                    <h1>Inscription</h1>
+                    <p className="auth-lead">Créez votre compte en quelques secondes.</p>
 
-                <fieldset className="roles">
-                    <legend className="field__label">Je suis</legend>
-                    <label className="role">
-                        <input
-                            type="radio"
-                            name="role"
-                            value="client"
-                            checked={form.role === 'client'}
-                            onChange={handleChange}
-                        />
-                        <span className="role__box">
-                            <span className="role__titre">Particulier</span>
-                            <span className="role__texte">Je cherche un artisan</span>
-                        </span>
-                    </label>
+                    {erreur && <p className="alert alert-error" role="alert">{erreur}</p>}
 
-                    <label className="role">
-                        <input
-                            type="radio"
-                            name="role"
-                            value="artisan"
-                            checked={form.role === 'artisan'}
-                            onChange={handleChange}
-                        />
-                        <span className="role__box">
-                            <span className="role__titre">Artisan</span>
-                            <span className="role__texte">Je propose mes services</span>
-                        </span>
-                    </label>
-                </fieldset>
-
-                <div className="field-row">
-                    <label className="field">
-                        <span className="field__label">Prenom</span>
-                        <input
-                            className="field__input"
-                            type="text"
-                            name="firstName"
-                            autoComplete="given-name"
-                            required
-                            value={form.firstName}
-                            onChange={handleChange}
-                        />
-                    </label>
-
-                    <label className="field">
-                        <span className="field__label">Nom</span>
-                        <input
-                            className="field__input"
-                            type="text"
-                            name="lastName"
-                            autoComplete="family-name"
-                            required
-                            value={form.lastName}
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
-
-                <label className="field">
-                    <span className="field__label">Email</span>
-                    <input
-                        className="field__input"
-                        type="email"
-                        name="email"
-                        autoComplete="email"
-                        required
-                        value={form.email}
-                        onChange={handleChange}
-                    />
-                </label>
-
-                <label className="field">
-                    <span className="field__label">Telephone</span>
-                    <input
-                        className="field__input"
-                        type="tel"
-                        name="phone"
-                        autoComplete="tel"
-                        required
-                        placeholder="06 12 34 56 78"
-                        value={form.phone}
-                        onChange={handleChange}
-                    />
-                </label>
-
-                {form.role === 'artisan' && (
-                    <>
-                        <label className="field">
-                            <span className="field__label">Nom de l'entreprise</span>
-                            <input
-                                className="field__input"
-                                type="text"
-                                name="companyName"
-                                autoComplete='organization'
-                                required
-                                value={form.companyName}
-                                onChange={handleChange}
-                            />
-                        </label>
-
-                        <label className="field">
-                            <span className="field__label">Adresse</span>
-                            <input
-                                className="field__input"
-                                type="text"
-                                name="addressLine"
-                                autoComplete='street-address'
-                                placeholder='1 rue des lilas'
-                                value={form.addressLine}
-                                onChange={handleChange}
-                            />
-                        </label>
-
-                        <div className="field-row">
-                            <label className="field">
-                                <span className="field__label">Code Postal</span>
+                    <fieldset className="role-fieldset">
+                        <legend className="fld-label">Je suis</legend>
+                        <div className="role-picker">
+                            <label className="role-opt">
                                 <input
-                                    className='field__input'
-                                    type='text'
-                                    name='postalCode'
-                                    autoComplete='postal-code'
-                                    inputMode="numeric"
+                                    type="radio"
+                                    name="role"
+                                    value="client"
+                                    checked={form.role === 'client'}
+                                    onChange={handleChange}
+                                />
+                                <span className="box">
+                                    <span className="t">Particulier</span>
+                                    <span className="s">Je cherche un artisan</span>
+                                </span>
+                            </label>
+
+                            <label className="role-opt">
+                                <input
+                                    type="radio"
+                                    name="role"
+                                    value="artisan"
+                                    checked={form.role === 'artisan'}
+                                    onChange={handleChange}
+                                />
+                                <span className="box">
+                                    <span className="t">Artisan</span>
+                                    <span className="s">Je propose mes services</span>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div className="field-stack">
+                        <div className="duo">
+                            <label className="fld">
+                                <span className="fld-label">Prénom</span>
+                                <input
+                                    className="input"
+                                    type="text"
+                                    name="firstName"
+                                    autoComplete="given-name"
                                     required
-                                    value={form.postalCode}
+                                    value={form.firstName}
                                     onChange={handleChange}
                                 />
                             </label>
 
-                            <label className="field">
-                                <span className="field__label">Ville</span>
+                            <label className="fld">
+                                <span className="fld-label">Nom</span>
                                 <input
-                                    className="field__input"
+                                    className="input"
                                     type="text"
-                                    name="city"
-                                    autoComplete="address-level2"
+                                    name="lastName"
+                                    autoComplete="family-name"
                                     required
-                                    value={form.city}
+                                    value={form.lastName}
                                     onChange={handleChange}
                                 />
                             </label>
                         </div>
-                    </>
-                )}
 
-                <label className="field">
-                    <span className="field__label">Mot de passe</span>
-                    <input
-                        className="field__input"
-                        type="password"
-                        name="password"
-                        autoComplete="new-password"
-                        minLength={8}
-                        required
-                        value={form.password}
-                        onChange={handleChange}
-                    />
-                    <span className="field__hint">8 caracteres minimum</span>
-                </label>
+                        <label className="fld">
+                            <span className="fld-label">Email</span>
+                            <input
+                                className="input"
+                                type="email"
+                                name="email"
+                                autoComplete="email"
+                                required
+                                value={form.email}
+                                onChange={handleChange}
+                            />
+                        </label>
 
-                <label className="field">
-                    <span className="field__label">Confirmer le mot de passe</span>
-                    <input
-                        className="field__input"
-                        type="password"
-                        name="passwordConfirm"
-                        autoComplete="new-password"
-                        required
-                        value={form.passwordConfirm}
-                        onChange={handleChange}
-                    />
-                </label>
+                        <label className="fld">
+                            <span className="fld-label">Téléphone</span>
+                            <input
+                                className="input"
+                                type="tel"
+                                name="phone"
+                                autoComplete="tel"
+                                required
+                                placeholder="06 12 34 56 78"
+                                value={form.phone}
+                                onChange={handleChange}
+                            />
+                        </label>
 
-                <button className="btn btn--primary btn--block" type="submit" disabled={envoi}>
-                    {envoi ? 'Creation…' : 'Creer mon compte'}
-                </button>
+                        {form.role === 'artisan' && (
+                            <>
+                                <label className="fld">
+                                    <span className="fld-label">Nom de l'entreprise</span>
+                                    <input
+                                        className="input"
+                                        type="text"
+                                        name="companyName"
+                                        autoComplete="organization"
+                                        required
+                                        value={form.companyName}
+                                        onChange={handleChange}
+                                    />
+                                </label>
 
-                <p className="auth__switch">
-                    Deja inscrit ? <a href="/connexion">Se connecter</a>
-                </p>
-            </form>
-        </main>
+                                <label className="fld">
+                                    <span className="fld-label">Adresse</span>
+                                    <input
+                                        className="input"
+                                        type="text"
+                                        name="addressLine"
+                                        autoComplete="street-address"
+                                        placeholder="1 rue des lilas"
+                                        value={form.addressLine}
+                                        onChange={handleChange}
+                                    />
+                                </label>
+
+                                <div className="duo">
+                                    <label className="fld">
+                                        <span className="fld-label">Code postal</span>
+                                        <input
+                                            className="input"
+                                            type="text"
+                                            name="postalCode"
+                                            autoComplete="postal-code"
+                                            inputMode="numeric"
+                                            required
+                                            value={form.postalCode}
+                                            onChange={handleChange}
+                                        />
+                                    </label>
+
+                                    <label className="fld">
+                                        <span className="fld-label">Ville</span>
+                                        <input
+                                            className="input"
+                                            type="text"
+                                            name="city"
+                                            autoComplete="address-level2"
+                                            required
+                                            value={form.city}
+                                            onChange={handleChange}
+                                        />
+                                    </label>
+                                </div>
+                            </>
+                        )}
+
+                        <label className="fld">
+                            <span className="fld-label">Mot de passe</span>
+                            <input
+                                className="input"
+                                type="password"
+                                name="password"
+                                autoComplete="new-password"
+                                minLength={8}
+                                required
+                                value={form.password}
+                                onChange={handleChange}
+                            />
+                            <span className="input-hint">8 caractères minimum</span>
+                        </label>
+
+                        <label className="fld">
+                            <span className="fld-label">Confirmer le mot de passe</span>
+                            <input
+                                className="input"
+                                type="password"
+                                name="passwordConfirm"
+                                autoComplete="new-password"
+                                required
+                                value={form.passwordConfirm}
+                                onChange={handleChange}
+                            />
+                        </label>
+                    </div>
+
+                    <div className="auth-actions">
+                        <button className="btn btn-primary btn-block" type="submit" disabled={envoi}>
+                            {envoi ? 'Création…' : 'Créer mon compte'}
+                        </button>
+                    </div>
+
+                    <p className="auth-switch">
+                        Déjà inscrit ? <a href="/connexion">Se connecter</a>
+                    </p>
+                </form>
+            </div>
+        </div>
   )
 }

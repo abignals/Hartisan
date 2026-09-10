@@ -56,7 +56,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if req.Role != role {
 	http.Error(w, `{"error":"role invalide pour ce compte"}`, http.StatusUnauthorized)
 	return
-}
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(req.Password)); err != nil {
+    	http.Error(w, `{"error":"Mot de passe invalide"}`, http.StatusUnauthorized)
+    	return
+	}
 
 	//Error management
 	rawToken, err := generateSessionToken()
@@ -65,11 +70,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tokenHash := hashToken(rawToken)
-
-	if err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(req.Password)); err != nil {
-    	http.Error(w, `{"error":"Mot de passe invalide"}`, http.StatusUnauthorized)
-    	return
-	}
 
 	userAgent := r.UserAgent()
 

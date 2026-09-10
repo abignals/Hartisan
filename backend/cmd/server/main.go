@@ -38,6 +38,8 @@ func main() {
 	mux.HandleFunc("GET /api/trades", tradesHandler)
 	mux.HandleFunc("GET /api/artisan/profile", exigeRole("artisan", artisanProfileGet))
 	mux.HandleFunc("PUT /api/artisan/profile", exigeRole("artisan", artisanProfilePut))
+	mux.HandleFunc("GET /api/conversations", exigeAuth(conversationListHandler))
+	mux.HandleFunc("GET /api/conversations/{id}/messages", exigeAuth(conversationMessageHandler))
 	
 	mux.HandleFunc("GET /api/db-test", func(w http.ResponseWriter, r *http.Request) {
 		var now string

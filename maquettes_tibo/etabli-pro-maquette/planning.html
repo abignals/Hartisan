@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emploi du temps — L'Établi Pro</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="planning.html" class="brand">
+    <span class="brand-mark">É</span>
+    <span class="brand-name">L'Établi</span>
+    <span class="pro-tag">Espace pro</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="planning.html" class="active">Emploi du temps</a></li>
+    <li><a href="messages.html">Messages</a></li>
+    <li><a href="documents.html">Documents</a></li>
+    <li><a href="profil.html">Profil</a></li>
+  </ul>
+  <div class="nav-user">MR</div>
+</nav>
+
+<div class="page">
+  <div class="page-head">
+    <p class="eyebrow">Michel Roussel — Électricien</p>
+    <h1>Emploi du temps</h1>
+    <p>Semaine du 9 au 13 mars. Cliquez sur un rendez-vous pour voir l'intervention, les documents partagés et l'historique du client.</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--blue);"></span>Devis validé</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--amber);"></span>En attente de validation client</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--red);"></span>Urgence</div>
+  </div>
+
+  <div class="week-grid">
+    <div class="week-cell-head"></div>
+    <div class="week-cell-head">Lundi<span class="d">9 mars</span></div>
+    <div class="week-cell-head">Mardi<span class="d">10 mars</span></div>
+    <div class="week-cell-head">Mercredi<span class="d">11 mars</span></div>
+    <div class="week-cell-head">Jeudi<span class="d">12 mars</span></div>
+    <div class="week-cell-head">Vendredi<span class="d">13 mars</span></div>
+
+    <!-- 8h - 10h -->
+    <div class="week-time">8h–10h</div>
+    <div class="week-slot">
+      <button class="appt" style="background:var(--blue);" onclick="openDrawer('camille', 'Lundi 8h–10h', 'Remplacement disjoncteurs')">
+        <span class="c-name">Camille Vasseur</span>
+        <span class="c-type">Remplacement disjoncteurs</span>
+      </button>
+    </div>
+    <div class="week-slot"></div>
+    <div class="week-slot">
+      <button class="appt" style="background:var(--red);" onclick="openDrawer('julien', 'Mercredi 8h–10h', 'Urgence — panne totale')">
+        <span class="c-name">Julien Mercier</span>
+        <span class="c-type">Urgence — panne totale</span>
+      </button>
+    </div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+
+    <!-- 10h - 12h -->
+    <div class="week-time">10h–12h</div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot">
+      <button class="appt" style="background:var(--blue);" onclick="openDrawer('nadia', 'Vendredi 10h–12h', 'Rénovation électrique — pose 1')">
+        <span class="c-name">Nadia Ferreira</span>
+        <span class="c-type">Rénovation électrique — pose 1</span>
+      </button>
+    </div>
+
+    <!-- 12h - 14h -->
+    <div class="week-time">12h–14h</div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+
+    <!-- 14h - 16h -->
+    <div class="week-time">14h–16h</div>
+    <div class="week-slot">
+      <button class="appt" style="background:var(--amber);" onclick="openDrawer('nadia', 'Lundi 14h–16h', '1er RDV — devis rénovation')">
+        <span class="c-name">Nadia Ferreira</span>
+        <span class="c-type">1er RDV — devis rénovation</span>
+      </button>
+    </div>
+    <div class="week-slot">
+      <button class="appt" style="background:var(--blue);" onclick="openDrawer('camille', 'Mardi 14h–16h', 'Suivi — vérification tableau')">
+        <span class="c-name">Camille Vasseur</span>
+        <span class="c-type">Suivi — vérification tableau</span>
+      </button>
+    </div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+
+    <!-- 16h - 18h -->
+    <div class="week-time">16h–18h</div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot">
+      <button class="appt" style="background:var(--amber);" onclick="openDrawer('julien', 'Jeudi 16h–18h', 'Devis — mise aux normes')">
+        <span class="c-name">Julien Mercier</span>
+        <span class="c-type">Devis — mise aux normes</span>
+      </button>
+    </div>
+    <div class="week-slot"></div>
+
+    <!-- 18h - 20h -->
+    <div class="week-time">18h–20h</div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+    <div class="week-slot"></div>
+  </div>
+</div>
+
+<!-- ============ PANNEAU CLIENT ============ -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="avatar" id="dw-avatar">CV</div>
+    <div>
+      <div class="name" id="dw-name">Camille Vasseur</div>
+      <div class="addr" id="dw-addr">14 rue des Lilas, 69004 Lyon</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+
+  <div class="drawer-body">
+    <div class="drawer-section">
+      <h3>Intervention</h3>
+      <div class="drawer-current">
+        <div class="when" id="dw-when">Lundi 8h–10h</div>
+        <div class="title" id="dw-title">Remplacement disjoncteurs</div>
+        <div class="desc" id="dw-desc">Remplacement de 2 disjoncteurs au tableau électrique.</div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Documents partagés avec ce client</h3>
+      <div id="dw-docs"></div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Historique avec ce client</h3>
+      <div id="dw-history"></div>
+    </div>
+  </div>
+
+  <div class="drawer-footer">
+    <a href="messages.html">Ouvrir la messagerie</a>
+    <a href="documents.html">Voir tous ses documents</a>
+  </div>
+</div>
+
+<div class="mockup-flag">Maquette — nav du haut + planning cliquable</div>
+
+<script>
+var clients = {
+  camille: {
+    name: "Camille Vasseur", initials: "CV", addr: "14 rue des Lilas, 69004 Lyon",
+    docs: [
+      { t: "Devis — remplacement disjoncteurs", type: "devis", amt: "180 €", status: "confirmed", label: "Approuvé" },
+      { t: "Facture — mise aux normes tableau", type: "facture", amt: "420 €", status: "confirmed", label: "Réglée" }
+    ],
+    history: [
+      { date: "2 février", desc: "Mise aux normes du tableau électrique" }
+    ]
+  },
+  nadia: {
+    name: "Nadia Ferreira", initials: "NF", addr: "8 avenue Berthelot, 69007 Lyon",
+    docs: [
+      { t: "Devis — rénovation électrique complète", type: "devis", amt: "3 100 €", status: "pending", label: "En attente d'approbation" }
+    ],
+    history: []
+  },
+  julien: {
+    name: "Julien Mercier", initials: "JM", addr: "22 rue Garibaldi, 69003 Lyon",
+    docs: [
+      { t: "Facture — dépannage panne totale", type: "facture", amt: "150 €", status: "confirmed", label: "Réglée" },
+      { t: "Devis — mise aux normes", type: "devis", amt: "890 €", status: "pending", label: "En attente d'approbation" }
+    ],
+    history: [
+      { date: "18 janvier", desc: "Dépannage suite à une coupure générale" }
+    ]
+  }
+};
+
+function openDrawer(id, when, title){
+  var c = clients[id];
+  document.getElementById('dw-avatar').textContent = c.initials;
+  document.getElementById('dw-name').textContent = c.name;
+  document.getElementById('dw-addr').textContent = c.addr;
+  document.getElementById('dw-when').textContent = when;
+  document.getElementById('dw-title').textContent = title;
+  document.getElementById('dw-desc').textContent = "Détail de l'intervention convenu avec le client — visible aussi dans Documents.";
+
+  var docsHtml = c.docs.map(function(d){
+    var color = d.status === 'confirmed' ? 'var(--green)' : 'var(--amber)';
+    return '<div class="drawer-doc-row"><span class="t">' + d.t + '</span><span class="amt">' + d.amt + '</span>' +
+      '<span class="stamp" style="background:' + color + ';">' + d.label + '</span></div>';
+  }).join('');
+  document.getElementById('dw-docs').innerHTML = docsHtml || '<p style="font-size:12.5px;color:var(--ink-faint);">Aucun document partagé pour le moment.</p>';
+
+  var histHtml = c.history.map(function(h){
+    return '<div class="drawer-hist-row"><div class="date">' + h.date + '</div><div class="desc">' + h.desc + '</div></div>';
+  }).join('');
+  document.getElementById('dw-history').innerHTML = histHtml || '<p style="font-size:12.5px;color:var(--ink-faint);">Premier contact avec ce client.</p>';
+
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+</script>
+</body>
+</html>

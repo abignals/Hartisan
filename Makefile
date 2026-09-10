@@ -19,7 +19,7 @@ export
 .PHONY: help setup dev dev-down prod-setup prod-up prod-down prod-restart \
         build rebuild ps logs check smoke prod-smoke \
         sh-backend sh-frontend psql tidy test-back lint-front \
-        migrate-create migrate-up migrate-down prod-migrate-up prod-migrate-down \
+        migrate-create migrate-up migrate-down migrate-version prod-migrate-up prod-migrate-down \
         clean nuke
 
 # ─── Aide ────────────────────────────────────────────────────
@@ -143,6 +143,10 @@ migrate-up: ## Applique les migrations en attente (dev)
 migrate-down: ## Annule la dernière migration (dev)
 	$(MIGRATE) --network $(NETWORK) migrate/migrate \
 		-path=/migrations -database "$(DB_URL)" down 1
+
+migrate-version: ## Affiche la version courante — suffixée (dirty) si migration interrompue
+	$(MIGRATE) --network $(NETWORK) migrate/migrate \
+		-path=/migrations -database "$(DB_URL)" version
 
 prod-migrate-up: ## Applique les migrations en attente (prod)
 	$(MIGRATE) --network $(NETWORK_PROD) migrate/migrate \

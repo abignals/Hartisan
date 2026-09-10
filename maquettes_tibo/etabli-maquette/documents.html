@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documents — L'Établi</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="profil.html" class="brand">
+    <span class="brand-mark">É</span>
+    <span class="brand-name">L'Établi</span>
+    <span class="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="profil.html">Profil</a></li>
+    <li><a href="messages.html">Messages</a></li>
+    <li><a href="rdv1.html">RDV &amp; interventions</a></li>
+    <li><a href="documents.html" class="active">Documents</a></li>
+  </ul>
+  <div class="nav-user">CL</div>
+</nav>
+
+<div class="page">
+  <div class="page-head">
+    <p class="eyebrow">Devis, factures, photos</p>
+    <h1>Documents</h1>
+    <p>Cliquez ou survolez un document pour l'ouvrir en aperçu à droite — comme dans le Finder.</p>
+  </div>
+
+  <div class="tabs">
+    <button type="button" class="active" data-tab="person" onclick="showGroup('person')">Par artisan</button>
+    <button type="button" data-tab="type" onclick="showGroup('type')">Par type de document</button>
+  </div>
+
+  <div class="docs-shell">
+
+    <!-- ============ LISTE ============ -->
+    <div>
+
+      <!-- VUE PAR ARTISAN -->
+      <div id="group-person">
+
+        <div class="doc-group-head">
+          <div class="avatar">MI</div>
+          <div><span class="name">Michel Roussel</span> <span class="role">— Électricien</span></div>
+        </div>
+        <div class="doc-list">
+          <div class="doc-line" data-title="Devis — remplacement disjoncteurs" data-type="Devis" data-typecolor="var(--amber)" data-artisan="Michel Roussel" data-role="Électricien" data-date="14 mars 2026" data-amount="180 €" data-status="Bloqué depuis le 12 mars" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--amber);"></span>
+            <span class="title">Devis — remplacement disjoncteurs</span>
+            <span class="date">14 mars</span>
+            <span class="amount">180 €</span>
+          </div>
+          <div class="doc-line" data-title="Facture — mise aux normes tableau" data-type="Facture" data-typecolor="var(--green)" data-artisan="Michel Roussel" data-role="Électricien" data-date="2 février 2026" data-amount="420 €" data-status="Réglée par carte" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--green);"></span>
+            <span class="title">Facture — mise aux normes tableau</span>
+            <span class="date">2 févr.</span>
+            <span class="amount">420 €</span>
+          </div>
+          <div class="doc-line" data-title="Photo — tableau électrique avant travaux" data-type="Photo" data-typecolor="var(--blue)" data-artisan="Michel Roussel" data-role="Électricien" data-date="30 janvier 2026" data-amount="—" data-status="Ajoutée par Michel" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--blue);"></span>
+            <span class="title">Photo — tableau électrique avant travaux</span>
+            <span class="date">30 janv.</span>
+            <span class="amount">—</span>
+          </div>
+        </div>
+
+        <div class="doc-group-head">
+          <div class="avatar">TH</div>
+          <div><span class="name">Thierry Blanc</span> <span class="role">— Chauffagiste</span></div>
+        </div>
+        <div class="doc-list">
+          <div class="doc-line" data-title="Devis — remplacement chaudière" data-type="Devis" data-typecolor="var(--amber)" data-artisan="Thierry Blanc" data-role="Chauffagiste" data-date="18 mars 2026" data-amount="2 350 €" data-status="Bloqué depuis le 18 mars" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--amber);"></span>
+            <span class="title">Devis — remplacement chaudière</span>
+            <span class="date">18 mars</span>
+            <span class="amount">2 350 €</span>
+          </div>
+          <div class="doc-line" data-title="Facture — entretien annuel" data-type="Facture" data-typecolor="var(--green)" data-artisan="Thierry Blanc" data-role="Chauffagiste" data-date="10 janvier 2026" data-amount="95 €" data-status="Réglée par carte" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--green);"></span>
+            <span class="title">Facture — entretien annuel</span>
+            <span class="date">10 janv.</span>
+            <span class="amount">95 €</span>
+          </div>
+          <div class="doc-line" data-title="Facture — réparation fuite chaudière" data-type="Facture" data-typecolor="var(--green)" data-artisan="Thierry Blanc" data-role="Chauffagiste" data-date="3 janvier 2026" data-amount="160 €" data-status="Réglée par carte" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--green);"></span>
+            <span class="title">Facture — réparation fuite chaudière</span>
+            <span class="date">3 janv.</span>
+            <span class="amount">160 €</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VUE PAR TYPE -->
+      <div id="group-type" style="display:none;">
+
+        <div class="doc-group-head">
+          <span class="type-dot" style="background:var(--amber);"></span>
+          <span class="type-label">Devis</span>
+        </div>
+        <div class="doc-list">
+          <div class="doc-line" data-title="Devis — remplacement disjoncteurs" data-type="Devis" data-typecolor="var(--amber)" data-artisan="Michel Roussel" data-role="Électricien" data-date="14 mars 2026" data-amount="180 €" data-status="Bloqué depuis le 12 mars" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--amber);"></span>
+            <span class="title">Remplacement disjoncteurs — Michel</span>
+            <span class="date">14 mars</span>
+            <span class="amount">180 €</span>
+          </div>
+          <div class="doc-line" data-title="Devis — remplacement chaudière" data-type="Devis" data-typecolor="var(--amber)" data-artisan="Thierry Blanc" data-role="Chauffagiste" data-date="18 mars 2026" data-amount="2 350 €" data-status="Bloqué depuis le 18 mars" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--amber);"></span>
+            <span class="title">Remplacement chaudière — Thierry</span>
+            <span class="date">18 mars</span>
+            <span class="amount">2 350 €</span>
+          </div>
+        </div>
+
+        <div class="doc-group-head">
+          <span class="type-dot" style="background:var(--green);"></span>
+          <span class="type-label">Factures</span>
+        </div>
+        <div class="doc-list">
+          <div class="doc-line" data-title="Facture — mise aux normes tableau" data-type="Facture" data-typecolor="var(--green)" data-artisan="Michel Roussel" data-role="Électricien" data-date="2 février 2026" data-amount="420 €" data-status="Réglée par carte" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--green);"></span>
+            <span class="title">Mise aux normes tableau — Michel</span>
+            <span class="date">2 févr.</span>
+            <span class="amount">420 €</span>
+          </div>
+          <div class="doc-line" data-title="Facture — entretien annuel" data-type="Facture" data-typecolor="var(--green)" data-artisan="Thierry Blanc" data-role="Chauffagiste" data-date="10 janvier 2026" data-amount="95 €" data-status="Réglée par carte" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--green);"></span>
+            <span class="title">Entretien annuel — Thierry</span>
+            <span class="date">10 janv.</span>
+            <span class="amount">95 €</span>
+          </div>
+          <div class="doc-line" data-title="Facture — réparation fuite chaudière" data-type="Facture" data-typecolor="var(--green)" data-artisan="Thierry Blanc" data-role="Chauffagiste" data-date="3 janvier 2026" data-amount="160 €" data-status="Réglée par carte" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--green);"></span>
+            <span class="title">Réparation fuite chaudière — Thierry</span>
+            <span class="date">3 janv.</span>
+            <span class="amount">160 €</span>
+          </div>
+        </div>
+
+        <div class="doc-group-head">
+          <span class="type-dot" style="background:var(--blue);"></span>
+          <span class="type-label">Photos</span>
+        </div>
+        <div class="doc-list">
+          <div class="doc-line" data-title="Photo — tableau électrique avant travaux" data-type="Photo" data-typecolor="var(--blue)" data-artisan="Michel Roussel" data-role="Électricien" data-date="30 janvier 2026" data-amount="—" data-status="Ajoutée par Michel" onclick="preview(this)" onmouseenter="preview(this)">
+            <span class="dot" style="background:var(--blue);"></span>
+            <span class="title">Tableau électrique avant travaux — Michel</span>
+            <span class="date">30 janv.</span>
+            <span class="amount">—</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============ APERÇU ============ -->
+    <div class="preview-panel" id="preview">
+      <div class="preview-empty">
+        <span class="glyph">📄</span>
+        Cliquez ou survolez un document dans la liste pour l'ouvrir ici en aperçu.
+      </div>
+    </div>
+
+  </div>
+
+  <p class="note" style="margin-top:24px;">La liste reste volontairement compacte : le repère (type, artisan, date, montant) tient sur une ligne, et le détail — avec l'aperçu du document — s'affiche à droite sans avoir à changer de page.</p>
+</div>
+
+<div class="mockup-flag">Maquette — nav du haut, onglets et aperçu cliquables</div>
+
+<script>
+function showGroup(group){
+  document.getElementById('group-person').style.display = group === 'person' ? 'block' : 'none';
+  document.getElementById('group-type').style.display = group === 'type' ? 'block' : 'none';
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.classList.toggle('active', b.dataset.tab === group);
+  });
+  resetPreview();
+}
+
+function resetPreview(){
+  document.querySelectorAll('.doc-line').forEach(function(l){ l.classList.remove('selected'); });
+  var panel = document.getElementById('preview');
+  panel.classList.remove('filled');
+  panel.innerHTML = '<div class="preview-empty"><span class="glyph">📄</span>Cliquez ou survolez un document dans la liste pour l\'ouvrir ici en aperçu.</div>';
+}
+
+function preview(el){
+  document.querySelectorAll('.doc-line').forEach(function(l){ l.classList.remove('selected'); });
+  el.classList.add('selected');
+
+  var panel = document.getElementById('preview');
+  panel.classList.add('filled');
+  var color = el.dataset.typecolor;
+
+  panel.innerHTML =
+    '<div class="preview-top">' +
+      '<span class="badge-type" style="background:' + color + ';color:#fff;">' + el.dataset.type + '</span>' +
+    '</div>' +
+    '<div class="preview-thumb">Aperçu ' + el.dataset.type.toLowerCase() + '</div>' +
+    '<div class="preview-title">' + el.dataset.title + '</div>' +
+    '<div class="preview-row"><span class="k">Artisan</span><span class="v">' + el.dataset.artisan + ' — ' + el.dataset.role + '</span></div>' +
+    '<div class="preview-row"><span class="k">Date</span><span class="v">' + el.dataset.date + '</span></div>' +
+    '<div class="preview-row"><span class="k">Montant</span><span class="v">' + el.dataset.amount + '</span></div>' +
+    '<div class="preview-row"><span class="k">Statut</span><span class="v">' + el.dataset.status + '</span></div>';
+}
+</script>
+</body>
+</html>

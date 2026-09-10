@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil — L'Établi</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="profil.html" class="brand">
+    <span class="brand-mark">É</span>
+    <span class="brand-name">L'Établi</span>
+    <span class="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="profil.html" class="active">Profil</a></li>
+    <li><a href="messages.html">Messages</a></li>
+    <li><a href="rdv.html">RDV &amp; interventions</a></li>
+    <li><a href="documents.html">Documents</a></li>
+  </ul>
+  <div class="nav-user">CL</div>
+</nav>
+
+<div class="page">
+  <div class="page-head">
+    <p class="eyebrow">Mon compte</p>
+    <h1>Profil</h1>
+    <p>Vos informations, vos moyens de paiement et les réglages de votre compte.</p>
+  </div>
+
+  <div class="layout-with-rail">
+    <div class="rail">
+      <a href="#informations" class="current">Informations</a>
+      <a href="#paiements">Paiements &amp; facturation</a>
+      <a href="#parametres">Paramètres</a>
+      <a href="#danger">Supprimer le compte</a>
+    </div>
+
+    <div>
+      <!-- INFORMATIONS -->
+      <section class="section" id="informations">
+        <div class="section-head">
+          <h2>Informations personnelles</h2>
+          <span class="hint">Client depuis mars 2024</span>
+        </div>
+
+        <div class="field-row">
+          <span class="field-label">Prénom</span>
+          <span class="field-value">Camille</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Nom</span>
+          <span class="field-value">Vasseur</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Adresse</span>
+          <span class="field-value">14 rue des Lilas, 69004 Lyon</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Téléphone</span>
+          <span class="field-value">06 12 34 56 78</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Email</span>
+          <span class="field-value">camille.vasseur@mail.com</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Mot de passe</span>
+          <span class="field-value muted">••••••••••</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+
+        <p class="note">Téléphone et email sont volontairement mis en avant : ce sont les infos que vous modifiez le plus souvent. Toute modification de ces deux champs déclenche une confirmation (code envoyé sur l'ancien ET le nouveau contact) pour éviter qu'on vous vole votre compte. Le mot de passe demande l'ancien mot de passe ; en cas d'oubli, la récupération passe par le téléphone/email vérifiés.</p>
+      </section>
+
+      <!-- PAIEMENTS -->
+      <section class="section" id="paiements">
+        <div class="section-head">
+          <h2>Paiements &amp; facturation</h2>
+        </div>
+
+        <div class="field-row">
+          <span class="field-label">Carte enregistrée</span>
+          <span class="field-value">Visa •••• 4471 — exp. 03/28</span>
+          <a href="#" class="pill-link danger">Supprimer</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Moyen de paiement</span>
+          <span class="field-value muted">Ajouter une carte ou un IBAN</span>
+          <a href="#" class="pill-link">Ajouter</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Nom de facturation</span>
+          <span class="field-value">Camille Vasseur</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Adresse de facturation</span>
+          <span class="field-value">14 rue des Lilas, 69004 Lyon</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+      </section>
+
+      <!-- PARAMETRES -->
+      <section class="section" id="parametres">
+        <div class="section-head">
+          <h2>Paramètres</h2>
+        </div>
+
+        <div class="field-row">
+          <span class="field-label">Langue</span>
+          <span class="field-value">Français</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Pays d'intervention</span>
+          <span class="field-value">France</span>
+          <a href="#" class="pill-link">Modifier</a>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Double authentification</span>
+          <span class="field-value muted">Désactivée</span>
+          <a href="#" class="pill-link">Activer</a>
+        </div>
+
+        <p class="note">Le pays d'intervention déterminera à terme le cadre légal appliqué (réglementations différentes entre pays) et donc les services disponibles — à affiner quand l'expansion hors France sera envisagée.</p>
+      </section>
+
+      <!-- DANGER ZONE -->
+      <section class="section danger-zone" id="danger">
+        <div class="section-head">
+          <h2>Supprimer le compte</h2>
+        </div>
+        <p style="margin:0 0 16px; font-size:13.5px; color:var(--ink-soft);">Cette action est définitive et supprime l'historique de vos RDV, messages et documents.</p>
+        <a href="#" class="pill-link danger">Supprimer mon compte</a>
+      </section>
+
+      <a href="#" class="pill-link" style="display:inline-block; margin-top:4px;">Se déconnecter</a>
+    </div>
+  </div>
+</div>
+
+<div class="mockup-flag">Maquette — non fonctionnelle, sauf la nav du haut</div>
+</body>
+</html>

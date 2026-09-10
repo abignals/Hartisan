@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import '../styles/etabli.css'
 
 export default function Connexion() {
   const [email, setEmail] = useState('')
@@ -27,7 +28,7 @@ export default function Connexion() {
       }
 
       const data = await res.json().catch(() => ({}))
-      window.location.href = data.role === 'artisan' ? '/profil' : '/'
+      window.location.href = data.role === 'artisan' ? '/pro/profil' : '/'
     } catch {
       setErreur('Serveur injoignable.')
     } finally {
@@ -36,78 +37,95 @@ export default function Connexion() {
   }
 
   return (
-    <main className="auth">
-      <form className="auth__card" onSubmit={handleSubmit}>
-        <h1 className="auth__title">Connexion</h1>
-        <p className="auth__lead">Accedez a votre espace DOCTO.</p>
+    <div className="etb">
+      <div className="auth-top">
+        <a href="/" className="brand">
+          <span className="brand-mark">É</span>
+          <span className="brand-name">L'Établi</span>
+          <span className="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
+        </a>
+      </div>
 
-        {erreur && <p className="auth__error" role="alert">{erreur}</p>}
+      <div className="auth-shell">
+        <form className="auth-card" onSubmit={handleSubmit}>
+          <p className="eyebrow">Mon compte</p>
+          <h1>Connexion</h1>
+          <p className="auth-lead">Accédez à votre espace L'Établi.</p>
 
-        <fieldset className="roles">
-          <legend className="field__label">Je suis</legend>
-          <label className="role">
-            <input
-              type="radio"
-              name="role"
-              value="client"
-              checked={role === 'client'}
-              onChange={(e) => setRole(e.target.value)}
-            />
-            <span className="role__box">
-              <span className="role__titre">Particulier</span>
-              <span className="role__texte">Je cherche un artisan</span>
-            </span>
-          </label>
+          {erreur && <p className="alert alert-error" role="alert">{erreur}</p>}
 
-          <label className="role">
-            <input
-              type="radio"
-              name="role"
-              value="artisan"
-              checked={role === 'artisan'}
-              onChange={(e) => setRole(e.target.value)}
-            />
-            <span className="role__box">
-              <span className="role__titre">Artisan</span>
-              <span className="role__texte">Je propose mes services</span>
-            </span>
-          </label>
-        </fieldset>        
+          <fieldset className="role-fieldset">
+            <legend className="fld-label">Je me connecte en tant que</legend>
+            <div className="role-picker">
+              <label className="role-opt">
+                <input
+                  type="radio"
+                  name="role"
+                  value="client"
+                  checked={role === 'client'}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                <span className="box">
+                  <span className="t">Particulier</span>
+                  <span className="s">Je cherche un artisan</span>
+                </span>
+              </label>
 
-        <label className="field">
-          <span className="field__label">Email</span>
-          <input
-            className="field__input"
-            type="email"
-            name="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
+              <label className="role-opt">
+                <input
+                  type="radio"
+                  name="role"
+                  value="artisan"
+                  checked={role === 'artisan'}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                <span className="box">
+                  <span className="t">Artisan</span>
+                  <span className="s">Je propose mes services</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
 
-        <label className="field">
-          <span className="field__label">Mot de passe</span>
-          <input
-            className="field__input"
-            type="password"
-            name="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
+          <div className="field-stack">
+            <label className="fld">
+              <span className="fld-label">Email</span>
+              <input
+                className="input"
+                type="email"
+                name="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
 
-        <button className="btn btn--primary btn--block" type="submit" disabled={envoi}>
-          {envoi ? 'Connexion…' : 'Se connecter'}
-        </button>
+            <label className="fld">
+              <span className="fld-label">Mot de passe</span>
+              <input
+                className="input"
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </label>
+          </div>
 
-        <p className="auth__switch">
-          Pas encore de compte ? <a href="/inscription">S'inscrire</a>
-        </p>
-      </form>
-    </main>
+          <div className="auth-actions">
+            <button className="btn btn-primary btn-block" type="submit" disabled={envoi}>
+              {envoi ? 'Connexion…' : 'Se connecter'}
+            </button>
+          </div>
+
+          <p className="auth-switch">
+            Pas encore de compte ? <a href="/inscription">S'inscrire</a>
+          </p>
+        </form>
+      </div>
+    </div>
   )
 }

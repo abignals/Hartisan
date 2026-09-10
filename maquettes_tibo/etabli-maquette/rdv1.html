@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDV & interventions — L'Établi</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="profil.html" class="brand">
+    <span class="brand-mark">É</span>
+    <span class="brand-name">L'Établi</span>
+    <span class="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="profil.html">Profil</a></li>
+    <li><a href="messages.html">Messages</a></li>
+    <li><a href="rdv1.html" class="active">RDV &amp; interventions</a></li>
+    <li><a href="documents.html">Documents</a></li>
+  </ul>
+  <div class="nav-user">CL</div>
+</nav>
+
+<div class="page">
+  <div class="page-head">
+    <p class="eyebrow">Suivi des chantiers</p>
+    <h1>RDV &amp; interventions</h1>
+    <p>Regroupés par artisan, comme un fil de discussion : on suit facilement l'historique d'un même chantier sans le mélanger avec les autres.</p>
+  </div>
+
+  <div class="tabs">
+    <button type="button" class="active" data-tab="upcoming" onclick="showTab('upcoming')">À venir</button>
+    <button type="button" data-tab="past" onclick="showTab('past')">Passées</button>
+  </div>
+
+  <!-- ============ À VENIR ============ -->
+  <div id="tab-upcoming">
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">MI</div>
+        <div><span class="name">Michel Roussel</span> — <span class="role">Électricien</span></div>
+      </div>
+      <div class="rdv-card">
+        <div class="when"><strong>Demain</strong>14 mars — 9h00</div>
+        <div class="who">
+          <div class="avatar">MI</div>
+          <div class="who-text"><div class="name">Michel Roussel</div><div class="role">Électricien</div></div>
+        </div>
+        <p class="what">Remplacement de 2 disjoncteurs au tableau électrique.</p>
+      </div>
+    </div>
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">TH</div>
+        <div><span class="name">Thierry Blanc</span> — <span class="role">Chauffagiste</span></div>
+      </div>
+      <div class="rdv-card">
+        <div class="when"><strong>Période</strong>Du 20 au 24 mars</div>
+        <div class="who">
+          <div class="avatar">TH</div>
+          <div class="who-text"><div class="name">Thierry Blanc</div><div class="role">Chauffagiste</div></div>
+        </div>
+        <p class="what">Remplacement de la chaudière — dépose, pose, mise en service. 3 interventions liées à ce chantier.</p>
+      </div>
+    </div>
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">SB</div>
+        <div><span class="name">Sofia Benali</span> — <span class="role">Plombière</span></div>
+      </div>
+      <div class="rdv-card">
+        <div class="when"><strong>28 mars</strong>14h30</div>
+        <div class="who">
+          <div class="avatar">SB</div>
+          <div class="who-text"><div class="name">Sofia Benali</div><div class="role">Plombière</div></div>
+        </div>
+        <p class="what">1er RDV — constat d'une fuite sous l'évier de la cuisine.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ PASSÉES ============ -->
+  <div id="tab-past" style="display:none;">
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">JD</div>
+        <div><span class="name">Julien Da Costa</span> — <span class="role">Électricien</span></div>
+      </div>
+      <div class="rdv-card">
+        <div class="when"><strong>2 février</strong>10h00</div>
+        <div class="who">
+          <div class="avatar">JD</div>
+          <div class="who-text"><div class="name">Julien Da Costa</div><div class="role">Électricien</div></div>
+        </div>
+        <p class="what">1er RDV pour devis mise aux normes — client n'a pas donné suite.</p>
+      </div>
+    </div>
+
+    <div class="thread-group">
+      <div class="thread-group-head">
+        <div class="avatar">SB</div>
+        <div><span class="name">Sofia Benali</span> — <span class="role">Plombière</span></div>
+      </div>
+      <div class="rdv-card">
+        <div class="when"><strong>Période</strong>Du 3 au 10 janv.</div>
+        <div class="who">
+          <div class="avatar">SB</div>
+          <div class="who-text"><div class="name">Sofia Benali</div><div class="role">Plombière</div></div>
+        </div>
+        <p class="what">Réparation d'une fuite + entretien annuel de la chaudière. 2 interventions liées.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="note" style="margin-top:24px;">Ici on ne garde que l'essentiel pour se repérer dans le temps : la date, qui vient, pour quoi faire. Le statut du devis (bloqué, en attente…) est du détail qui vit plutôt dans Documents — pas nécessaire quand on regarde son planning.</p>
+</div>
+
+<div class="mockup-flag">Maquette — nav du haut + onglets cliquables</div>
+
+<script>
+function showTab(tab){
+  document.getElementById('tab-upcoming').style.display = tab === 'upcoming' ? 'block' : 'none';
+  document.getElementById('tab-past').style.display = tab === 'past' ? 'block' : 'none';
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,6 +1,5 @@
-import { IconeLieu, IconeLoupe } from './Icone.jsx'
-import '../styles/index.css'
 import Entete from './Entete.jsx'
+import '../styles/etabli.css'
 
 const METIERS = [
     { nom: 'Plombiers'},
@@ -29,69 +28,63 @@ const initiales = (nom) =>
 
 export default function App() {
   return (
-    <>
+    <div className="etb">
       <Entete />
 
       <main>
         {/* ---- Accroche + recherche ---- */}
         <section className="hero">
-          <div className="container">
-            <h1 className="hero__title">
-              Trouvez un artisan et réservez en ligne
-            </h1>
-            <p className="hero__subtitle">
+          <div className="hero-inner">
+            <p className="eyebrow">Artisans vérifiés</p>
+            <h1>Trouvez un artisan et réservez en ligne</h1>
+            <p className="lead">
               Des professionnels vérifiés près de chez vous, avec leurs
               disponibilités en temps réel.
             </p>
 
             <form className="search" onSubmit={(e) => e.preventDefault()}>
-              <div className="search__field">
-                <IconeLoupe />
+              <div className="search-field">
+                <label htmlFor="q-metier">Métier</label>
                 <input
-                  className="search__input"
+                  id="q-metier"
                   type="search"
                   placeholder="Plombier, électricien, menuisier…"
-                  aria-label="Métier recherché"
                 />
               </div>
 
-              <span className="search__divider" aria-hidden="true" />
+              <span className="search-sep" aria-hidden="true" />
 
-              <div className="search__field">
-                <IconeLieu />
+              <div className="search-field">
+                <label htmlFor="q-lieu">Où</label>
                 <input
-                  className="search__input"
+                  id="q-lieu"
                   type="search"
-                  placeholder="Où ? Ville ou code postal"
-                  aria-label="Localisation"
+                  placeholder="Ville ou code postal"
                 />
               </div>
 
-              <button className="btn btn--primary search__submit" type="submit">
-                Rechercher
-              </button>
+              <button type="submit">Rechercher</button>
             </form>
 
-            <p className="hero__hint">
+            <p className="hero-hint">
               Plus de 2 000 artisans disponibles en Auvergne-Rhône-Alpes
             </p>
           </div>
         </section>
 
         {/* ---- Métiers ---- */}
-        <section className="section">
-          <div className="container">
-            <h2 className="section__title">Quel métier cherchez-vous ?</h2>
-            <p className="section__lead">
-              Les interventions les plus demandées cette semaine.
-            </p>
+        <section className="band">
+          <div className="band-inner">
+            <div className="band-head">
+              <h2>Quel métier cherchez-vous ?</h2>
+              <p>Les interventions les plus demandées cette semaine.</p>
+            </div>
 
-            <ul className="specialties">
+            <ul className="trades">
               {METIERS.map((m) => (
                 <li key={m.nom}>
-                  <a className="specialty" href={`/recherche?metier=${m.nom.toLowerCase()}`}>
-                    <span className="specialty__icon" aria-hidden="true">{m.icone}</span>
-                    <span>{m.nom}</span>
+                  <a href={`/recherche?metier=${m.nom.toLowerCase()}`}>
+                    {m.nom}
                   </a>
                 </li>
               ))}
@@ -100,16 +93,18 @@ export default function App() {
         </section>
 
         {/* ---- Étapes ---- */}
-        <section className="section section--alt">
-          <div className="container">
-            <h2 className="section__title">Comment ça marche</h2>
+        <section className="band band-alt">
+          <div className="band-inner">
+            <div className="band-head">
+              <h2>Comment ça marche</h2>
+            </div>
 
             <ol className="steps">
               {ETAPES.map((e, i) => (
                 <li className="step" key={e.titre}>
-                  <span className="step__num">{i + 1}</span>
-                  <h3 className="step__title">{e.titre}</h3>
-                  <p className="step__text">{e.texte}</p>
+                  <span className="step-num">{i + 1}</span>
+                  <h3>{e.titre}</h3>
+                  <p>{e.texte}</p>
                 </li>
               ))}
             </ol>
@@ -117,34 +112,34 @@ export default function App() {
         </section>
 
         {/* ---- Artisans ---- */}
-        <section className="section">
-          <div className="container">
-            <h2 className="section__title">Artisans les mieux notés</h2>
-            <p className="section__lead">Sélectionnés selon les avis vérifiés.</p>
+        <section className="band">
+          <div className="band-inner">
+            <div className="band-head">
+              <h2>Artisans les mieux notés</h2>
+              <p>Sélectionnés selon les avis vérifiés.</p>
+            </div>
 
-            <div className="cards">
+            <div className="pros">
               {ARTISANS.map((a) => (
-                <article className="card" key={a.id}>
-                  <div className="card__head">
-                    <div className="card__avatar">{initiales(a.nom)}</div>
+                <article className="pro-card" key={a.id}>
+                  <div className="pro-top">
+                    <div className="avatar">{initiales(a.nom)}</div>
                     <div>
-                      <h3 className="card__name">{a.nom}</h3>
-                      <p className="card__job">{a.metier}</p>
+                      <div className="pro-name">{a.nom}</div>
+                      <div className="pro-job">{a.metier}</div>
                     </div>
                   </div>
 
-                  <div className="card__meta">
-                    <span className="card__city">{a.ville}</span>
-                    <span className="card__rating">
-                      <span className="stars" aria-hidden="true">★</span>
-                      {a.note}
-                      <span className="card__job">({a.avis})</span>
+                  <div className="pro-meta">
+                    <span>{a.ville}</span>
+                    <span className="pro-rating">
+                      ★ {a.note} <span className="count">({a.avis})</span>
                     </span>
                   </div>
 
-                  <span className="badge">Dispo {a.dispo}</span>
+                  <span className="stamp confirmed">Dispo {a.dispo}</span>
 
-                  <a className="btn btn--primary btn--block" href={`/artisan/${a.id}`}>
+                  <a className="btn btn-primary" href={`/artisan/${a.id}`}>
                     Prendre rendez-vous
                   </a>
                 </article>
@@ -155,9 +150,9 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <div className="container">
-          <div className="footer__cols">
-            <div className="footer__col">
+        <div className="footer-inner">
+          <div className="footer-cols">
+            <div>
               <h4>Particuliers</h4>
               <ul>
                 <li><a href="/recherche">Trouver un artisan</a></li>
@@ -165,23 +160,23 @@ export default function App() {
                 <li><a href="/aide">Aide</a></li>
               </ul>
             </div>
-            <div className="footer__col">
+            <div>
               <h4>Artisans</h4>
               <ul>
                 <li><a href="/pro">Inscrire mon activité</a></li>
                 <li><a href="/pro/tarifs">Tarifs</a></li>
-                <li><a href="/pro/connexion">Espace pro</a></li>
+                <li><a href="/connexion">Espace pro</a></li>
               </ul>
             </div>
-            <div className="footer__col">
-              <h4>DOCTO</h4>
+            <div>
+              <h4>L'Établi</h4>
               <ul>
                 <li><a href="/a-propos">À propos</a></li>
                 <li><a href="/contact">Contact</a></li>
                 <li><a href="/recrutement">Recrutement</a></li>
               </ul>
             </div>
-            <div className="footer__col">
+            <div>
               <h4>Légal</h4>
               <ul>
                 <li><a href="/cgu">Conditions d'utilisation</a></li>
@@ -191,11 +186,12 @@ export default function App() {
             </div>
           </div>
 
-          <div className="footer__bottom">
-            © {new Date().getFullYear()} DOCTO — Tous droits réservés
+          <div className="footer-bottom">
+            <span>© {new Date().getFullYear()} L'Établi — Tous droits réservés</span>
+            <span>l'artisan qu'on connaît, l'heure qu'on respecte</span>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
