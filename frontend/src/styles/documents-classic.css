@@ -1,0 +1,276 @@
+/* Variante classique limitée à la page Documents.
+   ?style=original permet de comparer avec la présentation précédente. */
+.etb.documents-classic {
+  --bg: #f3f5f7;
+  --bg-raised: #ffffff;
+  --bg-sunken: #e9eef3;
+  --ink: #17324d;
+  --ink-soft: #40566a;
+  --ink-faint: #526577;
+  --line: #c2ccd5;
+  --line-strong: #879cad;
+  --blue: #075c98;
+  --blue-soft: #e6f1fa;
+  --font-display: Arial, Helvetica, sans-serif;
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-mono: Arial, Helvetica, sans-serif;
+  --radius-s: 0;
+  --radius-m: 0;
+  --radius-l: 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+/* Une géométrie simple, y compris dans les formulaires et la navigation. */
+.etb.documents-classic *,
+.etb.documents-classic *::before,
+.etb.documents-classic *::after {
+  border-radius: 0;
+}
+
+.etb.documents-classic :focus-visible {
+  outline: 3px solid #075c98;
+  outline-offset: 3px;
+}
+
+.etb.documents-classic .topbar {
+  background: #ffffff;
+  backdrop-filter: none;
+  border-bottom: 3px solid var(--blue);
+}
+
+.etb.documents-classic .nav-links a,
+.etb.documents-classic .btn {
+  font-size: 16px;
+  min-height: 44px;
+}
+
+.etb.documents-classic .nav-links a.active {
+  color: var(--blue);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.etb.documents-classic .btn-primary {
+  background: var(--blue);
+  color: white;
+  border: 1px solid var(--blue);
+}
+
+.etb.documents-classic .btn-primary:hover {
+  background: #064775;
+}
+
+.etb.documents-classic .btn-ghost {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.documents-classic .documents-heading h1 {
+  font-size: 36px;
+  letter-spacing: normal;
+}
+
+.documents-classic .documents-heading .eyebrow {
+  font-size: 15px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.etb.documents-classic .documents-drop {
+  min-height: 145px;
+  background: white;
+  border: 2px dashed var(--blue);
+  color: var(--ink);
+}
+
+.documents-classic .documents-drop strong {
+  font-size: 22px;
+}
+
+.documents-classic .documents-drop > span:not(.documents-upload-icon),
+.documents-classic .documents-drop small {
+  font-size: 16px;
+}
+
+.documents-classic .documents-drop u {
+  color: var(--blue);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.documents-classic .documents-upload-icon {
+  background: transparent;
+  font-weight: 700;
+}
+
+.documents-classic .documents-page label,
+.documents-classic .documents-page input,
+.documents-classic .documents-page select {
+  font-size: 16px;
+}
+
+.documents-classic .documents-page input,
+.documents-classic .documents-page select {
+  min-height: 44px;
+}
+
+.documents-classic .documents-tabs {
+  gap: 0;
+  border-bottom: 2px solid var(--blue);
+}
+
+.documents-classic .documents-tabs button {
+  min-height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  background: white;
+  color: var(--ink);
+  border-color: var(--line);
+  padding: 9px 14px;
+}
+
+.documents-classic .documents-tabs button.selected {
+  background: var(--blue);
+  color: white;
+  border-color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.documents-classic .documents-sort-note {
+  font-size: 15px;
+}
+
+.documents-classic .documents-tree,
+.documents-classic .document-preview-panel {
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+
+.documents-classic .documents-tree-heading {
+  background: var(--ink);
+  color: white;
+  font-size: 21px;
+  font-weight: 700;
+  min-height: 52px;
+}
+
+.documents-classic .documents-tree-heading span {
+  color: #eef3f8;
+  font-size: 15px;
+}
+
+.documents-classic .document-folder > summary {
+  background: #e4ebf2;
+  border-bottom-color: var(--line-strong);
+  font-size: 19px;
+}
+
+.documents-classic .document-category-folder > summary {
+  min-height: 44px;
+  font-size: 17px;
+}
+
+.documents-classic .document-category-folder > summary > span:last-child {
+  font-size: 16px;
+}
+
+.documents-classic .document-category-folder::before {
+  top: 22px;
+}
+
+.documents-classic .document-row {
+  min-height: 58px;
+  padding: 8px 10px;
+}
+
+.documents-classic .document-row.is-selected {
+  background: #dcecf8;
+  border-color: var(--blue);
+  box-shadow: inset 4px 0 0 var(--blue);
+}
+
+.documents-classic .document-row-name strong {
+  font-size: 18px;
+}
+
+.documents-classic .document-row-name > span,
+.documents-classic .document-row-date {
+  font-size: 16px;
+}
+
+.documents-classic .document-row .document-file-icon {
+  width: 36px;
+  height: 38px;
+  font-size: 13px;
+  background: white;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}
+
+.documents-classic .document-preview-heading h3 {
+  font-size: 22px;
+}
+
+.documents-classic .document-preview-heading > p:last-child,
+.documents-classic .document-preview-details dl,
+.documents-classic .document-preview-details .document-filename,
+.documents-classic .document-preview-hint,
+.documents-classic .documents-selected-file {
+  font-size: 16px;
+}
+
+.documents-classic .document-actions {
+  gap: 8px;
+}
+
+.documents-classic .document-actions a,
+.documents-classic .document-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  background: white;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-left: 0;
+}
+
+.documents-classic .document-actions a:hover {
+  background: var(--blue-soft);
+}
+
+.documents-classic .document-actions button {
+  color: #943321;
+  border-color: #943321;
+}
+
+.documents-classic .documents-dialog::backdrop {
+  backdrop-filter: none;
+}
+
+@media (max-width: 640px) {
+  .documents-classic .documents-selects {
+    flex-direction: column;
+  }
+
+  .documents-classic .documents-drop small {
+    font-size: 15px;
+  }
+
+  .documents-classic .document-row-date {
+    padding-left: 44px;
+  }
+
+  .documents-classic .document-preview-details dl > div {
+    flex-wrap: wrap;
+    gap: 2px 12px;
+  }
+}

@@ -7,6 +7,7 @@ const NAV_VISITEUR = [
 ]
 
 const NAV_CLIENT = [
+  { libelle: 'Recherche', href: '/recherche' },
   { libelle: 'Profil', href: '/profil' },
   { libelle: 'Messages', href: '/messages' },
   { libelle: 'RDV & interventions', href: '/rdv' },
@@ -45,13 +46,9 @@ export default function Entete() {
   return (
     <nav className="topbar">
       <a href="/" className="brand">
-        <span className="brand-mark">É</span>
-        <span className="brand-name">L'Établi</span>
-        {estPro ? (
-          <span className="pro-tag">Espace pro</span>
-        ) : (
-          <span className="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
-        )}
+        <span className="brand-mark">H</span>
+        <span className="brand-name">Artisan</span>
+        {estPro && <span className="pro-tag">Espace pro</span>}
       </a>
 
       {/* on attend /api/me : afficher la nav visiteur puis la remplacer ferait clignoter */}

@@ -20,9 +20,8 @@ function Entete() {
   return (
     <div className="auth-top">
       <a href="/" className="brand">
-        <span className="brand-mark">É</span>
-        <span className="brand-name">L'Établi</span>
-        <span className="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
+        <span className="brand-mark">H</span>
+        <span className="brand-name">Artisan</span>
       </a>
     </div>
   )

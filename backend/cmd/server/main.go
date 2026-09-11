@@ -24,6 +24,15 @@ func main() {
 
 	log.Println("Serveur ok")
 	mux := http.NewServeMux()
+	mux.HandleFunc("GET /api/search/artisans", searchArtisans)
+	mux.HandleFunc("GET /api/artisans/{id}", publicArtisanGet)
+	mux.HandleFunc("GET /api/search/locations", searchLocations)
+	mux.HandleFunc("GET /api/properties", exigeRole("client", propertiesGet))
+	mux.HandleFunc("POST /api/properties", exigeRole("client", propertiesPost))
+	mux.HandleFunc("GET /api/documents", exigeRole("client", documentsGet))
+	mux.HandleFunc("POST /api/documents", exigeRole("client", documentsPost))
+	mux.HandleFunc("GET /api/documents/{id}/file", exigeRole("client", documentFile))
+	mux.HandleFunc("DELETE /api/documents/{id}", exigeRole("client", documentDelete))
 	mux.HandleFunc("GET /health", func (w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte (`{"status":"ok"}`))
 	})
@@ -39,7 +48,9 @@ func main() {
 	mux.HandleFunc("GET /api/artisan/profile", exigeRole("artisan", artisanProfileGet))
 	mux.HandleFunc("PUT /api/artisan/profile", exigeRole("artisan", artisanProfilePut))
 	mux.HandleFunc("GET /api/conversations", exigeAuth(conversationListHandler))
+	mux.HandleFunc("POST /api/conversations", exigeRole("client", conversationCreateHandler))
 	mux.HandleFunc("GET /api/conversations/{id}/messages", exigeAuth(conversationMessageHandler))
+	mux.HandleFunc("POST /api/conversations/{id}/messages", exigeAuth(messageEnvoyerHandler))
 	
 	mux.HandleFunc("GET /api/db-test", func(w http.ResponseWriter, r *http.Request) {
 		var now string

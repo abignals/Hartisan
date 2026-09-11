@@ -40,9 +40,8 @@ export default function Connexion() {
     <div className="etb">
       <div className="auth-top">
         <a href="/" className="brand">
-          <span className="brand-mark">É</span>
-          <span className="brand-name">L'Établi</span>
-          <span className="brand-tag">l'artisan qu'on connaît, l'heure qu'on respecte</span>
+          <span className="brand-mark">H</span>
+          <span className="brand-name">Artisan</span>
         </a>
       </div>
 
@@ -50,7 +49,7 @@ export default function Connexion() {
         <form className="auth-card" onSubmit={handleSubmit}>
           <p className="eyebrow">Mon compte</p>
           <h1>Connexion</h1>
-          <p className="auth-lead">Accédez à votre espace L'Établi.</p>
+          <p className="auth-lead">Accédez à votre espace HArtisan.</p>
 
           {erreur && <p className="alert alert-error" role="alert">{erreur}</p>}
 

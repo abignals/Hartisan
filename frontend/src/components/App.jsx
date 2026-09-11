@@ -2,7 +2,7 @@ import Entete from './Entete.jsx'
 import '../styles/etabli.css'
 
 const METIERS = [
-    { nom: 'Plombiers'},
+    { nom: 'Plombier'},
     { nom: 'Electricien'},
     { nom: 'Chauffagiste'},
 ]
@@ -35,18 +35,18 @@ export default function App() {
         {/* ---- Accroche + recherche ---- */}
         <section className="hero">
           <div className="hero-inner">
-            <p className="eyebrow">Artisans vérifiés</p>
             <h1>Trouvez un artisan et réservez en ligne</h1>
             <p className="lead">
               Des professionnels vérifiés près de chez vous, avec leurs
               disponibilités en temps réel.
             </p>
 
-            <form className="search" onSubmit={(e) => e.preventDefault()}>
+            <form className="search" action="/recherche" method="get">
               <div className="search-field">
                 <label htmlFor="q-metier">Métier</label>
                 <input
                   id="q-metier"
+                  name="metier"
                   type="search"
                   placeholder="Plombier, électricien, menuisier…"
                 />
@@ -58,6 +58,7 @@ export default function App() {
                 <label htmlFor="q-lieu">Où</label>
                 <input
                   id="q-lieu"
+                  name="lieu"
                   type="search"
                   placeholder="Ville ou code postal"
                 />
@@ -169,7 +170,7 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <h4>L'Établi</h4>
+              <h4>HArtisan</h4>
               <ul>
                 <li><a href="/a-propos">À propos</a></li>
                 <li><a href="/contact">Contact</a></li>
@@ -187,8 +188,7 @@ export default function App() {
           </div>
 
           <div className="footer-bottom">
-            <span>© {new Date().getFullYear()} L'Établi — Tous droits réservés</span>
-            <span>l'artisan qu'on connaît, l'heure qu'on respecte</span>
+            <span>© {new Date().getFullYear()} HArtisan — Tous droits réservés</span>
           </div>
         </div>
       </footer>

@@ -1,0 +1,85 @@
+.etb .artisan-search-page { max-width: 1240px; }
+.artisan-search-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 28px; }
+.artisan-search-heading h1 { font-size: clamp(28px, 4vw, 38px); }
+.artisan-search-heading p { color: var(--ink-soft); font-size: 17px; }
+.artisan-search-form { display: grid; grid-template-columns: 1fr 1.3fr auto; align-items: start; gap: 18px; padding: 24px; background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; }
+.artisan-search-form > button { margin-top: 30px; min-height: 48px; font-size: 16px; }
+.search-autocomplete { position: relative; min-width: 0; }
+.search-autocomplete label { display: block; font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.search-autocomplete input { width: 100%; min-height: 48px; padding: 11px 13px; border: 1px solid var(--line-strong); border-radius: 6px; background: white; color: var(--ink); font: 16px var(--font-body); }
+.search-autocomplete small { display: block; color: var(--ink-soft); margin-top: 8px; }
+.search-autocomplete ul { position: absolute; top: 78px; left: 0; right: 0; z-index: 20; max-height: 280px; overflow: auto; margin: 0; padding: 4px; list-style: none; background: white; border: 1px solid var(--line-strong); border-radius: 6px; box-shadow: var(--shadow-card); }
+.search-autocomplete li { padding: 12px; cursor: pointer; font-size: 16px; }
+.search-autocomplete li:hover, .search-autocomplete li[aria-selected=true] { background: var(--blue-soft); }
+.search-demo-banner, .search-error { padding: 14px 18px; background: var(--amber-soft); border-radius: 8px; }
+.search-error { background: var(--red-soft); color: var(--red); }
+.search-start { text-align: center; padding: 54px 20px; color: var(--ink-soft); }
+.search-start h2, .search-start h3 { color: var(--ink); }
+.search-start button { margin: 5px; padding: 10px 16px; border: 1px solid var(--line-strong); border-radius: 6px; background: var(--bg-raised); color: var(--blue); font-size: 16px; }
+.search-results-heading { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; margin-top: 30px; }
+.search-results-heading p, .search-distance-note { color: var(--ink-soft); }
+.search-distance-note { font-size: 14px; }
+.search-results-list { display: grid; gap: 14px; margin-top: 20px; }
+.search-result { display: flex; align-items: center; gap: 22px; padding: 24px; background: var(--bg-raised); border: 1px solid var(--line); border-radius: 10px; }
+.search-result-avatar { display: grid; place-items: center; flex: none; width: 60px; height: 60px; background: var(--blue-soft); color: var(--blue); border-radius: 10px; font-size: 22px; font-weight: 600; }
+.search-result-info { flex: 1; min-width: 0; }
+.search-result h3 { font-size: 22px; overflow-wrap: anywhere; }
+.search-result p { margin: 5px 0; }
+.search-result-trades { color: var(--blue); font-weight: 600; }
+.search-result-description { color: var(--ink-soft); font-size: 15px; }
+.search-test-tag { display: inline-block; background: var(--amber-soft); color: #774526; font-size: 12px; padding: 3px 8px; margin-bottom: 8px; border-radius: 4px; }
+.etb .search-profile-dialog { width: min(560px, calc(100% - 32px)); max-height: 90vh; overflow: auto; padding: 28px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raised); color: var(--ink); }
+.search-profile-dialog::backdrop { background: rgba(20,35,30,.5); }
+.search-profile-title { display: flex; gap: 18px; align-items: start; }
+.search-profile-title button { margin-left: auto; background: none; border: 0; color: var(--ink); font-size: 28px; }
+@media (max-width: 760px) {
+ .artisan-search-heading, .search-result { align-items: flex-start; flex-direction: column; }
+ .artisan-search-form { grid-template-columns: 1fr; padding: 18px; }
+ .artisan-search-form > button { margin-top: 0; }
+ .search-result > button { width: 100%; }
+}
+
+/* Résultats centrés sur la personne, avec un résumé distinct à droite. */
+.etb .artisan-search-page { max-width: 1280px; }
+.artisan-search-form { border-top: 3px solid var(--blue); }
+.search-results-heading { justify-content: space-between; margin-top: 32px; }
+.search-results-heading h2 { font-size: 25px; }
+.search-results-heading p { margin: 8px 0 0; }
+.search-results-heading > span { color: var(--ink-soft); font-size: 14px; }
+.search-result { display: grid; grid-template-columns: minmax(0, 1fr) 265px; align-items: stretch; gap: 0; padding: 0; overflow: hidden; background: #fffefa; }
+.search-result-main { display: flex; align-items: flex-start; gap: 22px; padding: 28px; min-width: 0; }
+.search-portrait-link { flex: none; }
+.artisan-portrait { position: relative; width: 112px; height: 112px; overflow: hidden; border-radius: 12px; background: var(--blue-soft); flex: none; }
+.artisan-portrait img { position: absolute; width: 300%; height: 200%; max-width: none; display: block; }
+.artisan-portrait-fallback { display: grid; place-items: center; color: var(--blue); font-size: 30px; font-weight: 600; }
+.artisan-portrait.is-large { width: 152px; height: 152px; }
+.search-result h3 { font-size: 24px; margin-bottom: 4px; }
+.search-result h3 a { color: var(--blue); text-decoration: none; }
+.search-result h3 a:hover { text-decoration: underline; }
+.search-result-trades { font-size: 16px; color: var(--ink); font-weight: 500; }
+.search-result-company { font-size: 14px; color: var(--ink-soft); }
+.search-result .search-result-location { margin-top: 14px; font-size: 16px; }
+.search-result .search-result-rating { margin-top: 12px; color: #855025; font-size: 16px; font-weight: 600; }
+.search-result-rating > span:last-child { color: var(--ink-soft); font-weight: 400; font-size: 14px; }
+.artisan-specialties { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.artisan-specialties > span { padding: 5px 10px; border-radius: 5px; background: #eef2ec; color: #37594c; font-size: 14px; }
+.search-result-side { padding: 26px 22px; border-left: 1px solid var(--line); background: #f5f7f2; display: flex; flex-direction: column; justify-content: center; }
+.search-result-side .search-side-eyebrow { font-size: 14px; color: var(--ink-soft); margin-bottom: 10px; }
+.search-result-side .search-side-price { font-size: 26px; font-weight: 600; }
+.search-side-price > span { font-size: 15px; font-weight: 400; }
+.search-result-side small { color: var(--ink-soft); line-height: 1.5; }
+.search-result-side .btn { margin-top: 20px; padding: 12px; font-size: 15px; text-align: center; }
+.search-side-note { margin-top: 10px; font-size: 12px; color: var(--ink-soft); text-align: center; }
+@media (max-width: 900px) {
+ .search-result { grid-template-columns: minmax(0, 1fr); }
+ .search-result-side { border-left: 0; border-top: 1px solid var(--line); }
+ .search-result-side .btn { align-self: flex-start; min-width: 230px; }
+ .search-side-note { text-align: left; }
+}
+@media (max-width: 540px) {
+ .search-result-main { padding: 20px; gap: 14px; flex-wrap: wrap; }
+ .artisan-portrait { width: 88px; height: 88px; }
+ .search-result-info { flex-basis: 100%; }
+ .search-result h3 { font-size: 22px; }
+ .search-result-side .btn { width: 100%; min-width: 0; }
+}

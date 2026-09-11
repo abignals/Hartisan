@@ -1,5 +1,5 @@
 /* =========================================================
-   L'ÉTABLI — design system (d'apres maquettes_tibo)
+   HARTISAN — design system (d'apres maquettes_tibo)
    ---------------------------------------------------------
    Tout est porte par la classe racine .etb pour cohabiter
    avec index.css (Connexion / Inscription) sans collision :
@@ -8,21 +8,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 .etb {
-  --bg:            #ECEEEC;
-  --bg-raised:     #F5F6F4;
-  --bg-sunken:     #E2E5E2;
-  --ink:           #1B2A2E;
-  --ink-soft:      #52625F;
-  --ink-faint:     #8B968E;
-  --line:          #CBD1CB;
-  --line-strong:   #A9B2A9;
+  --bg:            #F7F2EA;
+  --bg-raised:     #FFFCF7;
+  --bg-sunken:     #EEE5D8;
+  --ink:           #243D39;
+  --ink-soft:      #56615A;
+  --ink-faint:     #687269;
+  --line:          #D9CEBF;
+  --line-strong:   #B5A794;
 
-  --blue:          #1F6F8B;
-  --blue-soft:     #E4EEF1;
+  --blue:          #004F56;
+  --blue-soft:     #E3EFEB;
   --green:         #3B6E52;
   --green-soft:    #E4EEE8;
-  --amber:         #B9791A;
-  --amber-soft:    #F3E9D6;
+  --amber:         #965332;
+  --amber-soft:    #F5E5D5;
   --red:           #A8432E;
   --red-soft:      #F3E3DE;
 
@@ -32,9 +32,9 @@
 
   --shadow-card: 0 1px 2px rgba(27,42,46,0.06), 0 4px 14px rgba(27,42,46,0.05);
 
-  --font-display: 'Space Grotesk', sans-serif;
+  --font-display: 'IBM Plex Sans', sans-serif;
   --font-body: 'IBM Plex Sans', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-mono: 'IBM Plex Sans', sans-serif;
 
   min-height: 100vh;
   background: var(--bg);
@@ -63,20 +63,20 @@
   display: flex; align-items: center; justify-content: space-between;
   gap: 24px;
   padding: 14px clamp(16px, 4vw, 32px);
-  background: rgba(245,246,244,0.92);
+  background: rgba(255,252,247,0.97);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
-.etb .brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
+.etb .brand { display: flex; align-items: baseline; gap: 4px; text-decoration: none; }
 .etb .brand-mark {
   width: 30px; height: 30px; border-radius: 8px;
-  background: var(--ink);
+  background: #004F56;
   display: flex; align-items: center; justify-content: center;
   color: var(--bg-raised);
   font-family: var(--font-display); font-weight: 700; font-size: 15px;
   flex: none;
 }
-.etb .brand-name { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--ink); }
+.etb .brand-name { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: #004F56; }
 .etb .brand-tag { display: none; }
 @media (min-width: 900px) {
   .etb .brand-tag {
@@ -100,7 +100,7 @@
   transition: background .15s, color .15s;
 }
 .etb .nav-links a:hover { background: var(--bg-sunken); color: var(--ink); }
-.etb .nav-links a.active { background: var(--ink); color: var(--bg-raised); }
+.etb .nav-links a.active { background: var(--blue); color: var(--bg-raised); }
 @media (max-width: 760px) { .etb .nav-links { display: none; } }
 
 .etb .nav-end { display: flex; align-items: center; gap: 10px; }
@@ -253,8 +253,8 @@
   font-size: 13.5px; font-weight: 600; text-decoration: none;
   transition: background .15s, color .15s, border-color .15s;
 }
-.etb .btn-primary { background: var(--ink); color: var(--bg-raised); }
-.etb .btn-primary:hover { background: #0F1D21; }
+.etb .btn-primary { background: var(--blue); color: var(--bg-raised); }
+.etb .btn-primary:hover { background: #003C42; }
 .etb .btn-primary:disabled { background: var(--line-strong); cursor: default; }
 .etb .btn-ghost { background: var(--bg-raised); color: var(--ink-soft); border-color: var(--line); }
 .etb .btn-ghost:hover { background: var(--bg-sunken); color: var(--ink); }
@@ -279,7 +279,7 @@
 .etb .auth-top {
   padding: 16px clamp(16px, 4vw, 32px);
   border-bottom: 1px solid var(--line);
-  background: rgba(245,246,244,0.92);
+  background: rgba(255,252,247,0.97);
 }
 .etb .auth-shell { display: flex; justify-content: center; padding: 48px clamp(16px, 4vw, 32px) 96px; }
 .etb .auth-card {
@@ -334,7 +334,7 @@
 .etb .hero {
   border-bottom: 1px solid var(--line);
   background:
-    radial-gradient(900px 340px at 12% -10%, var(--blue-soft), transparent 70%),
+    radial-gradient(900px 340px at 12% -10%, #F1DFC8, transparent 70%),
     var(--bg);
 }
 .etb .hero-inner { max-width: 1180px; margin: 0 auto; padding: 76px clamp(20px, 4vw, 56px) 68px; }
@@ -361,8 +361,8 @@
 .etb .search-field input:focus { outline: none; }
 .etb .search-field input::placeholder { color: var(--ink-faint); }
 .etb .search-sep { background: var(--line); margin: 10px 0; }
-.etb .search button { border: none; padding: 0 24px; border-radius: var(--radius-m); background: var(--ink); color: var(--bg-raised); font-weight: 600; font-size: 14px; }
-.etb .search button:hover { background: #0F1D21; }
+.etb .search button { border: none; padding: 0 24px; border-radius: var(--radius-m); background: var(--blue); color: var(--bg-raised); font-weight: 600; font-size: 16px; }
+.etb .search button:hover { background: #003C42; }
 @media (max-width: 720px) {
   .etb .search { grid-template-columns: 1fr; padding: 6px; }
   .etb .search-sep { height: 1px; margin: 0 14px; }
@@ -398,7 +398,7 @@
 .etb .step-num {
   display: inline-flex; align-items: center; justify-content: center;
   width: 28px; height: 28px; border-radius: 8px; margin-bottom: 14px;
-  background: var(--ink); color: var(--bg-raised);
+  background: var(--amber); color: var(--bg-raised);
   font-family: var(--font-mono); font-size: 12px; font-weight: 700;
 }
 .etb .step h3 { font-size: 16px; }
@@ -437,3 +437,110 @@
   font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint);
   display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
 }
+
+/* =========================================================
+   MESSAGERIE (d'apres les messages.html des deux maquettes)
+   ========================================================= */
+.etb .sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+.etb .messages-shell {
+  display: grid; grid-template-columns: 300px 1fr;
+  height: calc(100vh - 290px); min-height: 460px;
+  background: var(--bg-raised); border: 1px solid var(--line);
+  border-radius: var(--radius-l); overflow: hidden; box-shadow: var(--shadow-card);
+}
+
+.etb .conv-list { list-style: none; margin: 0; padding: 0; border-right: 1px solid var(--line); overflow-y: auto; }
+.etb .conv-item {
+  display: flex; gap: 12px; width: 100%; padding: 14px 16px;
+  border: none; border-bottom: 1px solid var(--line);
+  background: transparent; color: inherit; text-align: left; font: inherit;
+}
+.etb .conv-item:hover { background: var(--bg-sunken); }
+.etb .conv-item.active { background: var(--blue-soft); }
+.etb .conv-meta { display: block; min-width: 0; flex: 1; }
+.etb .conv-top { display: flex; justify-content: space-between; gap: 8px; }
+.etb .conv-top .name { font-weight: 600; font-size: 13.5px; }
+.etb .conv-top .time { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); flex: none; }
+.etb .conv-role { display: block; font-size: 11.5px; color: var(--ink-faint); margin: 1px 0 4px; }
+.etb .conv-snippet {
+  display: block; font-size: 12.5px; color: var(--ink-soft);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.etb .conv-item.unread .name { font-weight: 700; }
+.etb .conv-item.unread .conv-snippet { color: var(--ink); font-weight: 500; }
+.etb .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex: none; margin-top: 5px; }
+
+/* min-width/min-height 0 : sans ca, un long message elargit la colonne de la grille
+   au lieu de laisser .thread-body defiler */
+.etb .thread { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.etb .thread-head { padding: 16px 22px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; }
+.etb .thread-head .name { font-weight: 600; font-size: 14.5px; }
+.etb .thread-head .role { font-size: 12px; color: var(--ink-faint); }
+.etb .thread-back {
+  display: none;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink-soft);
+  width: 32px; height: 32px; border-radius: 50%; font-size: 15px; flex: none;
+}
+
+.etb .thread-body { flex: 1; overflow-y: auto; padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+.etb .bubble-row { display: flex; flex-direction: column; }
+.etb .day-sep {
+  align-self: center; margin: 6px 0 12px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint);
+  text-transform: capitalize;
+}
+.etb .bubble {
+  max-width: 62%; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; line-height: 1.45;
+  /* garde les retours a la ligne et coupe les URL trop longues */
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.etb .bubble .stamp-time { display: block; margin-top: 4px; font-family: var(--font-mono); font-size: 10.5px; opacity: .6; }
+.etb .bubble.them { background: var(--bg-sunken); align-self: flex-start; border-bottom-left-radius: 4px; }
+.etb .bubble.me { background: var(--blue); color: var(--bg-raised); align-self: flex-end; border-bottom-right-radius: 4px; }
+
+.etb .thread-empty {
+  margin: auto; padding: 24px; text-align: center;
+  font-family: var(--font-mono); font-size: 13px; color: var(--ink-faint);
+}
+.etb .thread-error { margin: 0; padding: 8px 18px; font-size: 12.5px; color: var(--red); background: var(--red-soft); }
+
+.etb .thread-input { display: flex; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--line); }
+.etb .thread-input input {
+  flex: 1; min-width: 0;
+  border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px;
+  font-family: var(--font-body); font-size: 13.5px; color: var(--ink);
+  background: var(--bg-sunken);
+}
+.etb .thread-input input:focus { outline: none; border-color: var(--blue); background: var(--bg-raised); }
+.etb .thread-input button {
+  border: none; background: var(--ink); color: var(--bg-raised);
+  padding: 0 18px; border-radius: 999px; font-weight: 600; font-size: 13px;
+}
+.etb .thread-input button:disabled { background: var(--line-strong); cursor: default; }
+
+/* Mobile : une seule colonne. Liste OU fil, jamais les deux.
+   (la maquette cachait juste la liste, ce qui empechait de changer de conversation) */
+@media (max-width: 720px) {
+  .etb .messages-shell { grid-template-columns: 1fr; height: calc(100vh - 230px); }
+  .etb .conv-list { border-right: none; }
+  .etb .messages-shell.has-active .conv-list { display: none; }
+  .etb .messages-shell:not(.has-active) .thread { display: none; }
+  .etb .thread-back { display: inline-flex; align-items: center; justify-content: center; }
+  .etb .bubble { max-width: 85%; }
+}
+
+/* Identité HArtisan : ivoire, teal profond et accents terre cuite. */
+.etb .brand-name { font-size: 22px; letter-spacing: -0.03em; }
+.etb .brand-mark { width: 34px; height: 34px; font-size: 21px; }
+.etb .eyebrow { color: var(--amber); font-weight: 600; }
+.etb .hero h1 { color: var(--ink); line-height: 1.15; }
+.etb .search-field label { color: var(--ink-soft); font-size: 13px; text-transform: none; letter-spacing: normal; }
+.etb .search-field input { font-size: 16px; }
+.etb .btn { min-height: 42px; }
+.etb .footer h4, .etb .footer-bottom { color: #DACFBD; }
+.etb .footer a { color: #F7F2EA; }
+.etb :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
