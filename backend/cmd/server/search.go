@@ -1,8 +1,8 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
- "database/sql"
 	"io"
 	"math"
 	"net/http"
@@ -15,7 +15,7 @@ import (
 )
 
 type searchArtisan struct {
- TestKey string `json:"test_key,omitempty"`
+	TestKey     string  `json:"test_key,omitempty"`
 	ID          string  `json:"id"`
 	Name        string  `json:"name"`
 	City        string  `json:"city"`
@@ -60,7 +60,7 @@ func searchArtisans(w http.ResponseWriter, r *http.Request) {
 	results := []searchArtisan{}
 	for rows.Next() {
 		var a searchArtisan
- var email string
+		var email string
 		if err := rows.Scan(&a.ID, &a.Name, &a.City, &a.PostalCode, &a.Description, &a.Trades, &a.Distance, &a.Radius, &email); err != nil {
 			docError(w, "Impossible de lire les résultats.", 500)
 			return
@@ -80,8 +80,8 @@ func searchArtisans(w http.ResponseWriter, r *http.Request) {
 }
 
 type searchLocation struct {
- Code string `json:"code,omitempty"`
- Department string `json:"department,omitempty"`
+	Code       string  `json:"code,omitempty"`
+	Department string  `json:"department,omitempty"`
 	Name       string  `json:"name"`
 	PostalCode string  `json:"postal_code"`
 	Lat        float64 `json:"lat"`
@@ -155,8 +155,11 @@ func searchLocations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var communes []struct {
- Code string `json:"code"`
- Department struct { Code string `json:"code"`; Name string `json:"nom"` } `json:"departement"`
+		Code       string `json:"code"`
+		Department struct {
+			Code string `json:"code"`
+			Name string `json:"nom"`
+		} `json:"departement"`
 		Name        string   `json:"nom"`
 		PostalCodes []string `json:"codesPostaux"`
 		Center      struct {
@@ -172,10 +175,10 @@ func searchLocations(w http.ResponseWriter, r *http.Request) {
 		if len(c.Center.Coordinates) != 2 {
 			continue
 		}
-        if !numeric {
-            items = append(items, searchLocation{Name: c.Name, Code: c.Code, Department: c.Department.Name, Lat: c.Center.Coordinates[1], Lon: c.Center.Coordinates[0]})
-            continue
-        }
+		if !numeric {
+			items = append(items, searchLocation{Name: c.Name, Code: c.Code, Department: c.Department.Name, Lat: c.Center.Coordinates[1], Lon: c.Center.Coordinates[0]})
+			continue
+		}
 		for _, postal := range c.PostalCodes {
 			if numeric && postal != query {
 				continue
@@ -192,20 +195,20 @@ func searchLocations(w http.ResponseWriter, r *http.Request) {
 
 // Seuls les six comptes réservés à l’essai reçoivent des compléments fictifs côté interface.
 func searchTestKey(email string) string {
- for _, key := range []string{"plombier-lyon", "plombier-villeurbanne", "electricien-lyon", "chauffagiste-lyon", "plombier-paris", "electricien-paris"} {
-  if email == "test-recherche-" + key + "@example.invalid" {
-   return key
-  }
- }
- return ""
+	for _, key := range []string{"plombier-lyon", "plombier-villeurbanne", "electricien-lyon", "chauffagiste-lyon", "plombier-paris", "electricien-paris"} {
+		if email == "test-recherche-"+key+"@example.invalid" {
+			return key
+		}
+	}
+	return ""
 }
 
 // Une page publique ne doit jamais rendre accessible un profil non publiable.
 func publicArtisanGet(w http.ResponseWriter, r *http.Request) {
- var a searchArtisan
- var email string
- err := db.DB.QueryRowContext(r.Context(),
-  `SELECT a.user_id, a.company_name, a.city, a.postal_code,
+	var a searchArtisan
+	var email string
+	err := db.DB.QueryRowContext(r.Context(),
+		`SELECT a.user_id, a.company_name, a.city, a.postal_code,
           COALESCE(a.description, ''), a.service_radius_m / 1000, u.email,
           COALESCE((SELECT string_agg(t.label, ', ' ORDER BY t.label)
            FROM artisan_trades at JOIN trades t ON t.id = at.trade_id
@@ -213,16 +216,16 @@ func publicArtisanGet(w http.ResponseWriter, r *http.Request) {
    FROM artisan_profiles a JOIN users u ON u.id = a.user_id
    WHERE a.user_id::text = $1 AND a.status = 'approved'
      AND u.role = 'artisan' AND u.suspended_at IS NULL`,
-  r.PathValue("id"),
- ).Scan(&a.ID, &a.Name, &a.City, &a.PostalCode, &a.Description, &a.Radius, &email, &a.Trades)
- if err == sql.ErrNoRows {
-  docError(w, "Ce profil est introuvable ou n’est plus disponible.", http.StatusNotFound)
-  return
- }
- if err != nil {
-  docError(w, "Impossible de charger ce profil.", http.StatusInternalServerError)
-  return
- }
- a.TestKey = searchTestKey(email)
- docJSON(w, a)
+		r.PathValue("id"),
+	).Scan(&a.ID, &a.Name, &a.City, &a.PostalCode, &a.Description, &a.Radius, &email, &a.Trades)
+	if err == sql.ErrNoRows {
+		docError(w, "Ce profil est introuvable ou n’est plus disponible.", http.StatusNotFound)
+		return
+	}
+	if err != nil {
+		docError(w, "Impossible de charger ce profil.", http.StatusInternalServerError)
+		return
+	}
+	a.TestKey = searchTestKey(email)
+	docJSON(w, a)
 }

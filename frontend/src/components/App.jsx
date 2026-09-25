@@ -165,8 +165,8 @@ export default function App() {
               <h4>Artisans</h4>
               <ul>
                 <li><a href="/pro">Inscrire mon activité</a></li>
-                <li><a href="/pro/tarifs">Tarifs</a></li>
-                <li><a href="/connexion">Espace pro</a></li>
+                <li><a href="/pro#conseiller">Contacter un conseiller</a></li>
+                <li><a href="/connexion?role=artisan">Espace pro</a></li>
               </ul>
             </div>
             <div>

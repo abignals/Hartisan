@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"docto/db"
@@ -23,45 +22,22 @@ type registerRequestUser struct {
 	AddressLine string `json:"address_line"`
 	PostalCode  string `json:"postal_code"`
 	City        string `json:"city"`
+	Siret string `json:"siret"`
+	Description string `json:"description"`
+	TradeIDs []int `json:"trade_ids"`
+	ServiceRadiusM int `json:"service_radius_m"`
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	var req registerRequestUser
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, `{"error":"corps de requete invalide"}`, http.StatusBadRequest)
+	if !decodeBooking(w, r, &req) { return }
+	if role := r.PathValue("registrationRole"); role != "" && role != req.Role {
+		docError(w, "Ce formulaire ne correspond pas au type de compte demandé.", 400)
 		return
 	}
-
-	if req.Role != "client" && req.Role != "artisan" {
-		http.Error(w, `{"error":"role invalide"}`, http.StatusBadRequest)
+	if message := validateRegistration(&req); message != "" {
+		docError(w, message, 400)
 		return
-	}
-
-	if req.Email == "" || req.Password == "" {
-		http.Error(w, `{"error":"email et password requis"}`, http.StatusBadRequest)
-		return
-	}
-
-	if req.FirstName == "" || req.LastName == "" {
-		http.Error(w, `{"error":"Prenom et nom de famille requis"}`, http.StatusBadRequest)
-		return
-	}
-
-	if req.Phone == "" {
-		http.Error(w, `{"error":"telephone requis"}`, http.StatusBadRequest)
-		return
-	}
-
-	if len(req.Password) < 8 {
-		http.Error(w, `{"error":"le mot de passe doit contenir au moins 8 caracteres"}`, http.StatusBadRequest)
-		return
-	}
-
-	if req.Role == "artisan" {
-		if req.CompanyName == "" || req.PostalCode == "" || req.City == "" || req.AddressLine == ""{
-			http.Error(w, `{"error":"nom d'entreprise, code postal et ville requis pour un artisan"}`, http.StatusBadRequest)
-			return
-		}
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -103,16 +79,24 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.Role == "artisan" {
-		// Remplacer (0,0) par les vraies coordonnées une fois la géoloc added
-		_, err = tx.Exec(
-			`INSERT INTO artisan_profiles (user_id, company_name, address_line, postal_code, city, location)
-			 VALUES ($1, $2, $3, $4, $5, ST_SetSRID(ST_MakePoint(0, 0), 4326)::geography)`,
-			id, req.CompanyName, req.AddressLine, req.PostalCode, req.City,
-		)
+		var profileID string
+		err = tx.QueryRow(
+			`INSERT INTO artisan_profiles (user_id, company_name, address_line, postal_code, city, location, siret, description, service_radius_m, status)
+			 VALUES ($1, $2, $3, $4, $5, ST_SetSRID(ST_MakePoint(0, 0), 4326)::geography, $6, $7, $8, 'pending') RETURNING id`,
+			id, req.CompanyName, req.AddressLine, req.PostalCode, req.City, req.Siret, req.Description, req.ServiceRadiusM,
+		).Scan(&profileID)
 		if err != nil {
-			http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
+			if pg, ok := err.(*pq.Error); ok && pg.Code == "23505" { docError(w, "Ce SIRET est déjà associé à un compte.", 409); return }
+			docError(w, "Création du profil impossible.", 500)
 			return
 		}
+		for _, tradeID := range req.TradeIDs {
+			result, tradeErr := tx.Exec(`INSERT INTO artisan_trades(artisan_id,trade_id) SELECT $1,id FROM trades WHERE id=$2 AND is_active`, profileID, tradeID)
+			if tradeErr != nil { docError(w, "Enregistrement des métiers impossible.", 500); return }
+			count, countErr := result.RowsAffected()
+			if countErr != nil || count != 1 { docError(w, "Un métier sélectionné n’est plus disponible.", 400); return }
+		}
+
 	}
 
 	if err := tx.Commit(); err != nil {
@@ -122,5 +106,5 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(fmt.Sprintf(`{"id":"%s","email":"%s"}`, id, req.Email)))
+	json.NewEncoder(w).Encode(map[string]string{"id": id, "email": req.Email})
 }

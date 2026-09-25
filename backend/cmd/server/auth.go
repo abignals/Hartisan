@@ -46,8 +46,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	//Cherche le USER dans la base selon son ID
 	var userID string
 	var passwordHash string
+	tx, err := db.DB.Begin()
+	if err != nil { http.Error(w, `{"error":"erreur interne"}`, 500); return }
+	defer tx.Rollback()
 	var role string
-	err = db.DB.QueryRow("SELECT id, password_hash, role FROM users WHERE email = $1", req.Email,).Scan(&userID, &passwordHash, &role)
+	err = tx.QueryRow("SELECT id, password_hash, role FROM users WHERE email = $1 AND suspended_at IS NULL FOR SHARE", req.Email,).Scan(&userID, &passwordHash, &role)
 	if err != nil {
 		http.Error(w, `{"error":"email n'exsite pas"}`, http.StatusUnauthorized)
 		return
@@ -79,7 +82,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	expiresAt := time.Now().Add(24 * time.Hour)
-	_, err = db.DB.Exec(
+	_, err = tx.Exec(
 		"INSERT INTO sessions (token_hash, user_id, user_agent, ip_address, expires_at) VALUES ($1, $2, $3, $4, $5)",
 		tokenHash, userID, userAgent, ipAddress, expiresAt,
 	)
@@ -87,6 +90,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
 		return
 	}
+
+	if err := tx.Commit(); err != nil { http.Error(w, `{"error":"erreur interne"}`, 500); return }
 
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session_id",

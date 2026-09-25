@@ -78,6 +78,26 @@ func TestSearchVisibility(t *testing.T) {
 	if len(result.Artisans) != 1 || result.Artisans[0].ID != ids[0] {
 		t.Fatalf("Filtrage incorrect: %s", rec.Body)
 	}
+	// Le lien direct d’un profil applique les mêmes restrictions de publication.
+	for i, id := range ids {
+		request := httptest.NewRequest("GET", "/api/artisans/"+id, nil)
+		request.SetPathValue("id", id)
+		profile := httptest.NewRecorder()
+		publicArtisanGet(profile, request)
+		expected := 200
+		if i == 1 || i == 2 || i == 3 {
+			expected = 404
+		}
+		if profile.Code != expected {
+			t.Fatalf("Profil %d : statut %d, attendu %d", i, profile.Code, expected)
+		}
+		for _, private := range []string{"email", "phone", "address_line", "password_hash"} {
+			if strings.Contains(profile.Body.String(), `"`+private+`"`) {
+				t.Fatalf("Champ privé publié dans le profil : %s", private)
+			}
+		}
+	}
+
 	for _, private := range []string{"email", "phone", "address_line", "password_hash"} {
 		if strings.Contains(rec.Body.String(), `"`+private+`"`) {
 			t.Fatalf("Champ privé publié: %s", private)

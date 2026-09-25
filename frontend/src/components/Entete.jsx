@@ -80,8 +80,7 @@ export default function Entete() {
           </>
         ) : (
           <>
-            <a className="btn btn-ghost" href="/connexion">Connexion</a>
-            <a className="btn btn-primary" href="/inscription">Inscription</a>
+            <a className="btn btn-primary" href="/connexion">Se connecter</a>
           </>
         )}
       </div>

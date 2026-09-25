@@ -20,6 +20,8 @@ type conversationResume struct {
 }
 
 type messageLigne struct {
+ PhotoURL string `json:"photo_url,omitempty"`
+ Reported bool `json:"reported"`
 	ID			string		`json:"id"`
 	DeMoi		bool		`json:"de_moi"`
 	Body		string		`json:"body"`
@@ -53,7 +55,9 @@ func conversationMessageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rows, err := db.DB.Query(
-		`SELECT m.id, m.sender_id = $2 AS de_moi, m.body, m.created_at
+		`SELECT m.id, m.sender_id = $2 AS de_moi, m.body, m.created_at,
+ CASE WHEN EXISTS(SELECT 1 FROM message_photos p WHERE p.message_id=m.id) THEN '/api/messages/'||m.id::text||'/photo' ELSE '' END,
+ EXISTS(SELECT 1 FROM message_reports mr WHERE mr.message_id=m.id AND mr.reporter_id=$2)
 			FROM messages m
 		 WHERE m.conversation_id = $1
 		 ORDER by m.created_at`,
@@ -68,7 +72,7 @@ func conversationMessageHandler(w http.ResponseWriter, r *http.Request) {
 	messages := []messageLigne{}
 	for rows.Next() {
 		var m messageLigne
-		if err := rows.Scan(&m.ID, &m.DeMoi, &m.Body, &m.CreatedAt); err != nil {
+		if err := rows.Scan(&m.ID, &m.DeMoi, &m.Body, &m.CreatedAt, &m.PhotoURL, &m.Reported); err != nil {
 			http.Error(w, `{"error":"erreur interne"}`, http.StatusInternalServerError)
 			return
 		}

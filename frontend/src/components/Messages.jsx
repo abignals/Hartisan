@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import PhotoPicker from './PhotoPicker.jsx'
+import { sendPhoto } from '../lib/messagePhotos.js'
+import '../styles/booking.css'
 import Entete from './Entete.jsx'
 import '../styles/etabli.css'
 
@@ -8,7 +11,7 @@ const INTERVALLE_MS = 5000
 async function api(url, options) {
   const res = await fetch(url, { credentials: 'same-origin', ...options })
   if (res.status === 401) {
-    window.location.href = '/connexion'
+    window.location.href = window.location.pathname.startsWith('/pro') ? '/connexion?role=artisan' : '/connexion'
     throw new Error('Session expiree.')
   }
   if (!res.ok) {
@@ -85,18 +88,73 @@ export default function Messages() {
   const [messages, setMessages] = useState(null)
   const [brouillon, setBrouillon] = useState('')
   const [envoi, setEnvoi] = useState(false)
+  const [photos, setPhotos] = useState([])
+  const [contextMenu, setContextMenu] = useState(null)
+  const menuRef = useRef(null)
+  const pressTimer = useRef(null)
+  const longPressed = useRef(false)
+  const messageTarget = useRef(null)
+  const reportDialog = useRef(null)
+  const [reportId, setReportId] = useState(null)
+  const [reportReason, setReportReason] = useState('')
+  const [reportBusy, setReportBusy] = useState(false)
+  const [reportError, setReportError] = useState('')
+  const [reportNotice, setReportNotice] = useState('')
   const [erreur, setErreur] = useState(null)
   const [erreurFil, setErreurFil] = useState(null)
 
   const corpsFil = useRef(null)
   const champ = useRef(null)
+  useEffect(() => {
+    if (!champ.current) return
+    champ.current.style.height = '42px'
+    champ.current.style.height = `${Math.min(champ.current.scrollHeight + 2, 140)}px`
+  }, [brouillon, actifId])
+
   // incremente a chaque envoi : une reponse de polling partie AVANT l'envoi
   // ne doit pas ecraser le fil (le message envoye disparaitrait quelques secondes)
   const versionFil = useRef(0)
 
+  useEffect(() => {
+    if (!contextMenu) return
+    menuRef.current?.querySelector('button')?.focus()
+    function close(e) {
+      if (e.type === 'keydown' && e.key !== 'Escape' && e.key !== 'Tab') return
+      if (e.type === 'pointerdown' && menuRef.current?.contains(e.target)) return
+      setContextMenu(null)
+      if (e.type === 'keydown' && e.key === 'Escape') messageTarget.current?.focus()
+    }
+    document.addEventListener('pointerdown', close)
+    document.addEventListener('keydown', close)
+    window.addEventListener('resize', close)
+    document.addEventListener('scroll', close, true)
+    return () => {
+      document.removeEventListener('pointerdown', close)
+      document.removeEventListener('keydown', close)
+      window.removeEventListener('resize', close)
+      document.removeEventListener('scroll', close, true)
+    }
+  }, [contextMenu])
+  useEffect(() => {
+    if (!reportId) return
+    const dialog = reportDialog.current
+    dialog.showModal()
+    return () => { dialog.close(); messageTarget.current?.focus() }
+  }, [reportId])
+  useEffect(() => () => clearTimeout(pressTimer.current), [])
+  function showMenu(e, message) {
+    if (!estPro || message.de_moi || reportBusy) return
+    e.preventDefault()
+    messageTarget.current = e.currentTarget
+    const rect = e.currentTarget.getBoundingClientRect()
+    setContextMenu({ message, x: Math.max(8, Math.min(e.clientX || rect.left, window.innerWidth - 228)), y: Math.max(8, Math.min(e.clientY || rect.bottom, window.innerHeight - 64)) })
+  }
+
   const actif = conversations?.find((c) => c.id === actifId) ?? null
 
   function ouvrir(id) {
+    setContextMenu(null); clearTimeout(pressTimer.current)
+    setPhotos([]); setReportId(null); setReportNotice('')
     setActifId(id)
     memoriserDansUrl(id)
   }
@@ -192,50 +250,64 @@ export default function Messages() {
     if (corpsFil.current) corpsFil.current.scrollTop = corpsFil.current.scrollHeight
   }, [dernierId])
 
+  async function signaler(e) {
+    e.preventDefault(); setReportBusy(true); setReportError('')
+    try {
+      await api(`/api/messages/${reportId}/report`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason: reportReason }) })
+      setMessages(ms => ms?.map(m => m.id === reportId ? { ...m, reported: true } : m))
+      setReportId(null); setReportReason(''); setReportNotice('Signalement enregistré. Il ne bloque pas automatiquement la conversation.')
+    } catch (e) { setReportError(e.message) }
+    finally { setReportBusy(false) }
+  }
+
   async function envoyer(e) {
     e.preventDefault()
     const body = brouillon.trim()
-    if (!body || envoi || !actifId) return
-
-    setEnvoi(true)
-    setErreurFil(null)
-    try {
-      const m = await api(`/api/conversations/${actifId}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body }),
-      })
+    if ((!body && !photos.length) || envoi || !actifId) return
+    setEnvoi(true); setErreurFil(null)
+    const remaining = [...photos]
+    function append(m) {
       versionFil.current += 1
-      setMessages((ms) => [...(ms ?? []), m])
-      setConversations((cs) =>
-        trierParActivite(
-          cs.map((c) =>
-            c.id === actifId ? { ...c, dernier_message: m.body, last_message_at: m.created_at } : c,
-          ),
-        ),
-      )
-      setBrouillon('')
-    } catch (err) {
-      setErreurFil(err.message)
-    } finally {
-      setEnvoi(false)
-      champ.current?.focus()
+      setMessages(ms => (ms ?? []).some(existing => existing.id === m.id) ? ms : [...(ms ?? []), m])
+      setConversations(cs => trierParActivite(cs.map(c => c.id === actifId ? { ...c, dernier_message: m.body, last_message_at: m.created_at } : c)))
     }
+    try {
+      if (body) {
+        append(await api(`/api/conversations/${actifId}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body }) }))
+        setBrouillon('')
+      }
+      while (remaining.length) {
+        append(await sendPhoto(actifId, remaining[0]))
+        remaining.shift(); setPhotos([...remaining])
+      }
+    } catch (err) { setErreurFil(`${err.message} Les éléments déjà envoyés sont conservés ; vous pouvez réessayer pour le reste.`) }
+    finally { setEnvoi(false); champ.current?.focus() }
   }
 
   return (
-    <div className="etb">
+    <div className="etb messages-page">
       <Entete />
+      {reportId && <dialog ref={reportDialog} className="booking-dialog message-report-dialog" aria-labelledby="report-title" onCancel={e => { e.preventDefault(); if (!reportBusy) setReportId(null) }}>
+        <div className="booking-dialog-heading"><h2 id="report-title">Signaler un message</h2><button type="button" aria-label="Fermer" disabled={reportBusy} onClick={() => setReportId(null)}>×</button></div>
+        <p>Expliquez ce qui pose problème dans ce message ou cette photo.</p>
+        <form className="booking-form" onSubmit={signaler}>
+          <label>Motif du signalement<textarea autoFocus required minLength={3} maxLength={1000} rows={5} value={reportReason} disabled={reportBusy} onChange={e => setReportReason(e.target.value)} placeholder="Décrivez la situation…" /></label>
+          {reportError && <p className="booking-error" role="alert">{reportError}</p>}
+          <div className="booking-actions"><button className="btn btn-ghost" type="button" disabled={reportBusy} onClick={() => setReportId(null)}>Annuler</button><button className="btn btn-primary" disabled={reportBusy}>{reportBusy ? 'Enregistrement…' : 'Envoyer le signalement'}</button></div>
+        </form>
+      </dialog>}
+
+      {contextMenu && <div ref={menuRef} className="message-context-menu" role="menu" aria-label="Actions du message" style={{ left: contextMenu.x, top: contextMenu.y }}>
+        <button type="button" role="menuitem" aria-disabled={contextMenu.message.reported} onClick={() => {
+          if (contextMenu.message.reported) { setContextMenu(null); messageTarget.current?.focus(); return }
+          setReportId(contextMenu.message.id); setReportReason(''); setReportError(''); setContextMenu(null)
+        }}>{contextMenu.message.reported ? 'Déjà signalé' : 'Signaler ce message'}</button>
+      </div>}
+
 
       <div className="page">
         <div className="page-head">
-          <p className="eyebrow">Messagerie</p>
           <h1>Messages</h1>
-          <p>
-            {estPro
-              ? "Échangez avec vos clients pour caler les créneaux et valider un prix avant d'intervenir."
-              : "Échangez directement avec l'artisan qui intervient chez vous — c'est ici qu'on cale les créneaux et qu'on valide un prix avant travaux."}
-          </p>
         </div>
 
         {erreur && <p className="alert alert-error" role="alert">{erreur}</p>}
@@ -245,7 +317,7 @@ export default function Messages() {
         ) : conversations.length === 0 ? (
           <p className="state-card">
             {estPro
-              ? 'Aucune conversation pour le moment. Vos clients vous écriront ici.'
+              ? 'Aucune conversation pour le moment. Les nouvelles demandes de rendez-vous ouvriront un échange ici.'
               : "Aucune conversation pour le moment. Contactez un artisan depuis sa fiche pour démarrer l'échange."}
           </p>
         ) : (
@@ -257,6 +329,7 @@ export default function Messages() {
                     type="button"
                     className={`conv-item${c.id === actifId ? ' active' : ''}${c.non_lus > 0 ? ' unread' : ''}`}
                     aria-current={c.id === actifId ? 'true' : undefined}
+                    disabled={envoi || reportBusy}
                     onClick={() => ouvrir(c.id)}
                   >
                     <span className="avatar" aria-hidden="true">{initiales(c.autre_nom)}</span>
@@ -289,6 +362,7 @@ export default function Messages() {
                     <button
                       type="button"
                       className="thread-back"
+                      disabled={envoi || reportBusy}
                       onClick={() => ouvrir(null)}
                       aria-label="Retour aux conversations"
                     >
@@ -313,10 +387,27 @@ export default function Messages() {
                         return (
                           <div key={m.id} className="bubble-row">
                             {nouveauJour && <p className="day-sep">{jour}</p>}
-                            <div className={`bubble ${m.de_moi ? 'me' : 'them'}`}>
-                              {m.body}
+                            <div className={`bubble ${m.de_moi ? 'me' : 'them'}`}
+                              tabIndex={estPro && !m.de_moi ? 0 : undefined}
+                              aria-label={estPro && !m.de_moi ? 'Message reçu. Menu avec clic droit ou Majuscule F10.' : undefined}
+                              onContextMenu={e => showMenu(e, m)}
+                              onKeyDown={e => { if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) showMenu(e, m) }}
+                              onPointerDown={e => {
+                                longPressed.current = false
+                                if (e.pointerType !== 'touch' || !estPro || m.de_moi || reportBusy) return
+                                const target = e.currentTarget, x = e.clientX, y = e.clientY
+                                clearTimeout(pressTimer.current)
+                                pressTimer.current = setTimeout(() => { longPressed.current = true; showMenu({ preventDefault() {}, currentTarget: target, clientX: x, clientY: y }, m) }, 550)
+                              }}
+                              onPointerUp={() => clearTimeout(pressTimer.current)}
+                              onPointerCancel={() => clearTimeout(pressTimer.current)}
+                              onPointerMove={() => clearTimeout(pressTimer.current)}
+                              onClickCapture={e => { if (longPressed.current) { e.preventDefault(); e.stopPropagation(); longPressed.current = false } }}>
+
+                              {m.photo_url ? <a href={m.photo_url} target="_blank" rel="noreferrer"><img className="message-photo" src={m.photo_url} alt="Photo envoyée dans la conversation — ouvrir en grand" loading="lazy" /></a> : m.body}
                               <span className="stamp-time">{heure(m.created_at)}</span>
                             </div>
+
                           </div>
                         )
                       })
@@ -327,18 +418,27 @@ export default function Messages() {
                     <p className="thread-error" role="alert">{erreurFil}</p>
                   )}
 
+                  {reportNotice && <p role="status" className="booking-notice">{reportNotice}</p>}
                   <form className="thread-input" onSubmit={envoyer}>
-                    <input
+                    <textarea
                       ref={champ}
-                      type="text"
+                      rows={1}
+                      title="Entrée : nouvelle ligne · Ctrl ou ⌘ + Entrée : envoyer"
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !e.nativeEvent.isComposing) {
+                          e.preventDefault()
+                          e.currentTarget.form.requestSubmit()
+                        }
+                      }}
                       placeholder="Écrire un message…"
                       aria-label="Votre message"
                       maxLength={5000}
                       value={brouillon}
                       onChange={(e) => setBrouillon(e.target.value)}
-                      disabled={messages === null}
+                      disabled={messages === null || envoi}
                     />
-                    <button type="submit" disabled={envoi || !brouillon.trim()}>
+                    <PhotoPicker compact files={photos} onChange={setPhotos} disabled={envoi || messages === null} />
+                    <button type="submit" disabled={envoi || messages === null || (!brouillon.trim() && !photos.length)}>
                       {envoi ? 'Envoi…' : 'Envoyer'}
                     </button>
                   </form>

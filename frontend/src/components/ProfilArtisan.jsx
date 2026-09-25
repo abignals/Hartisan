@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import AccountSettings from './AccountSettings.jsx'
 import Entete from './Entete.jsx'
 import '../styles/etabli.css'
 
@@ -10,6 +11,7 @@ const STATUTS = {
 }
 
 const RAIL = [
+  { id: 'informations', libelle: 'Informations et sécurité' },
   { id: 'verification', libelle: 'Vérification pro' },
   { id: 'activite',     libelle: 'Mon activité' },
   { id: 'zone',         libelle: "Zone d'intervention" },
@@ -43,7 +45,7 @@ export default function ProfilArtisan() {
     ])
       .then(async ([resProfil, resMetiers]) => {
         if (resProfil.status === 401) {
-          window.location.href = '/connexion'
+          window.location.href = '/connexion?role=artisan'
           return
         }
         if (resProfil.status === 403) {
@@ -157,6 +159,8 @@ export default function ProfilArtisan() {
             ))}
           </div>
 
+          <div>
+          <AccountSettings />
           <form onSubmit={handleSubmit}>
             {erreur && <p className="alert alert-error" role="alert">{erreur}</p>}
             {succes && <p className="alert alert-ok">Modifications enregistrées.</p>}
@@ -356,6 +360,7 @@ export default function ProfilArtisan() {
               Se déconnecter
             </button>
           </form>
+          </div>
         </div>
       </div>
     </div>

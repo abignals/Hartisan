@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
+import AccountSettings from './AccountSettings.jsx'
 import Entete from './Entete.jsx'
 import '../styles/etabli.css'
 
 const RAIL = [
   { id: 'informations', libelle: 'Informations' },
-  { id: 'paiements',    libelle: 'Paiements & facturation' },
   { id: 'parametres',   libelle: 'Paramètres' },
   { id: 'danger',       libelle: 'Supprimer le compte' },
 ]
@@ -67,7 +67,7 @@ export default function Profil() {
         <div className="page-head">
           <p className="eyebrow">Mon compte</p>
           <h1>Profil</h1>
-          <p>Vos informations, vos moyens de paiement et les réglages de votre compte.</p>
+          <p>Vos informations personnelles et la sécurité de votre compte.</p>
         </div>
 
         <div className="layout-with-rail">
@@ -85,74 +85,7 @@ export default function Profil() {
           </div>
 
           <div>
-            {/* INFORMATIONS */}
-            <section className="section" id="informations">
-              <div className="section-head">
-                <h2>Informations personnelles</h2>
-                <span className="hint">Compte particulier</span>
-              </div>
-
-              <div className="field-row">
-                <span className="field-label">Prénom</span>
-                <span className="field-value">{user.first_name}</span>
-                <PillInerte libelle="Modifier" />
-              </div>
-              <div className="field-row">
-                <span className="field-label">Nom</span>
-                <span className="field-value">{user.last_name}</span>
-                <PillInerte libelle="Modifier" />
-              </div>
-              <div className="field-row">
-                <span className="field-label">Adresse</span>
-                <span className="field-value muted">Non renseignée</span>
-                <PillInerte libelle="Ajouter" />
-              </div>
-              <div className="field-row">
-                <span className="field-label">Téléphone</span>
-                <span className="field-value">{user.phone}</span>
-                <PillInerte libelle="Modifier" />
-              </div>
-              <div className="field-row">
-                <span className="field-label">Email</span>
-                <span className="field-value">{user.email}</span>
-                <PillInerte libelle="Modifier" />
-              </div>
-              <div className="field-row">
-                <span className="field-label">Mot de passe</span>
-                <span className="field-value muted">••••••••••</span>
-                <PillInerte libelle="Modifier" />
-              </div>
-
-              <p className="note">
-                Téléphone et email sont volontairement mis en avant : ce sont les infos
-                que vous modifiez le plus souvent. Toute modification de ces deux champs
-                déclenchera une confirmation (code envoyé sur l'ancien ET le nouveau
-                contact) pour éviter qu'on vous vole votre compte.
-              </p>
-            </section>
-
-            {/* PAIEMENTS */}
-            <section className="section" id="paiements">
-              <div className="section-head">
-                <h2>Paiements &amp; facturation</h2>
-              </div>
-
-              <div className="field-row">
-                <span className="field-label">Moyen de paiement</span>
-                <span className="field-value muted">Aucune carte enregistrée</span>
-                <PillInerte libelle="Ajouter" />
-              </div>
-              <div className="field-row">
-                <span className="field-label">Nom de facturation</span>
-                <span className="field-value">{user.first_name} {user.last_name}</span>
-                <PillInerte libelle="Modifier" />
-              </div>
-              <div className="field-row">
-                <span className="field-label">Adresse de facturation</span>
-                <span className="field-value muted">Non renseignée</span>
-                <PillInerte libelle="Ajouter" />
-              </div>
-            </section>
+            <AccountSettings />
 
             {/* PARAMETRES */}
             <section className="section" id="parametres">
@@ -163,17 +96,14 @@ export default function Profil() {
               <div className="field-row">
                 <span className="field-label">Langue</span>
                 <span className="field-value">Français</span>
-                <PillInerte libelle="Modifier" />
               </div>
               <div className="field-row">
                 <span className="field-label">Pays d'intervention</span>
                 <span className="field-value">France</span>
-                <PillInerte libelle="Modifier" />
               </div>
               <div className="field-row">
                 <span className="field-label">Double authentification</span>
-                <span className="field-value muted">Désactivée</span>
-                <PillInerte libelle="Activer" />
+                <span className="field-value muted">Pas encore disponible</span>
               </div>
 
               <p className="note">

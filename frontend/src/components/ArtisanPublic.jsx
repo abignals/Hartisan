@@ -79,7 +79,7 @@ export default function ArtisanPublic() {
             <p className="artisan-note">Un problème caché ou complexe peut nécessiter un diagnostic sur place avant de chiffrer les travaux.</p></> : <p>{artisan.trades || 'Prestations non renseignées.'}</p>}
         </section>
         <section className="artisan-info-section" id="tarifs">
-          <h2>Tarifs et moyens de paiement</h2>
+          <h2>Tarifs</h2>
           {example ? <><p className="artisan-note">Exemples fictifs, en euros TTC. Il ne s’agit pas d’une offre commerciale.</p>
             <dl className="artisan-price-list">
               <div><dt>Déplacement dans le secteur déclaré</dt><dd>{example.travel} €</dd></div>
@@ -88,8 +88,7 @@ export default function ArtisanPublic() {
               <div><dt>Installation ou rénovation</dt><dd>Sur devis</dd></div>
             </dl>
             <p>Le montant final dépend du diagnostic, du matériel et de la durée de l’intervention. Une éventuelle majoration doit être annoncée avant votre accord.</p>
-            <h3>Moyens de paiement acceptés</h3><p>{example.payments.join(' · ')}</p>
-          </> : <p>Les tarifs et moyens de paiement ne sont pas encore renseignés.</p>}
+          </> : <p>Les tarifs ne sont pas encore renseignés.</p>}
         </section>
         <section className="artisan-info-section" id="pratique">
           <h2>Informations pratiques</h2>
@@ -122,9 +121,10 @@ export default function ArtisanPublic() {
         <div className="artisan-sidebar-body">
           <p><strong>À domicile</strong><br />{artisan.city} et environs</p>
           {example && <><p><strong>{example.travel} € de déplacement</strong><br /><span>Tarif fictif pour cet exemple</span></p><p><strong>{example.experience} ans d’expérience</strong><br />{example.specialties.slice(0, 2).join(' · ')}</p></>}
-          <a className="btn btn-primary" href="#tarifs">Consulter les tarifs</a>
+          {demo ? <a className="btn btn-primary" href={`/recherche?metier=${artisan.trade}&lieu=${encodeURIComponent(artisan.city)}&chercher=1`}>Tester avec un compte enregistré</a> : <a className="btn btn-primary" href={`/artisan/${id}/reserver`}>Demander un diagnostic</a>}
+          <a className="btn btn-ghost" href="#tarifs">Consulter les tarifs</a>
           <a className="btn btn-ghost" href="#prestations">Voir les prestations</a>
-          <p className="artisan-note">La réservation en ligne n’est pas encore disponible. Aucun créneau ne peut être réservé depuis cette page.</p>
+          <p className="artisan-note">Premier rendez-vous de diagnostic, sous réserve d’acceptation par l’artisan. La durée et les créneaux sont indiqués à l’étape suivante.</p>
         </div>
       </aside>
     </div>

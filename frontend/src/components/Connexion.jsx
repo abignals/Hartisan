@@ -6,7 +6,7 @@ export default function Connexion() {
   const [password, setPassword] = useState('')
   const [erreur, setErreur] = useState(null)
   const [envoi, setEnvoi] = useState(false)
-  const [role, setRole] = useState('client')
+  const role = new URLSearchParams(window.location.search).get('role') === 'artisan' || new URLSearchParams(window.location.search).get('retour')?.startsWith('/pro/') ? 'artisan' : 'client'
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -28,7 +28,10 @@ export default function Connexion() {
       }
 
       const data = await res.json().catch(() => ({}))
-      window.location.href = data.role === 'artisan' ? '/pro/profil' : '/'
+      const retour = new URLSearchParams(window.location.search).get('retour') || ''
+      const clientReturn = data.role === 'client' && (/^\/artisan\/[0-9a-f-]+\/reserver$/.test(retour) || retour === '/rdv')
+      const artisanReturn = data.role === 'artisan' && retour === '/pro/planning'
+      window.location.href = clientReturn || artisanReturn ? retour : data.role === 'artisan' ? '/pro/profil' : '/'
     } catch {
       setErreur('Serveur injoignable.')
     } finally {
@@ -48,43 +51,10 @@ export default function Connexion() {
       <div className="auth-shell">
         <form className="auth-card" onSubmit={handleSubmit}>
           <p className="eyebrow">Mon compte</p>
-          <h1>Connexion</h1>
+          <h1>{role === 'artisan' ? 'Se connecter à mon espace artisan' : 'Se connecter'}</h1>
           <p className="auth-lead">Accédez à votre espace HArtisan.</p>
 
           {erreur && <p className="alert alert-error" role="alert">{erreur}</p>}
-
-          <fieldset className="role-fieldset">
-            <legend className="fld-label">Je me connecte en tant que</legend>
-            <div className="role-picker">
-              <label className="role-opt">
-                <input
-                  type="radio"
-                  name="role"
-                  value="client"
-                  checked={role === 'client'}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-                <span className="box">
-                  <span className="t">Particulier</span>
-                  <span className="s">Je cherche un artisan</span>
-                </span>
-              </label>
-
-              <label className="role-opt">
-                <input
-                  type="radio"
-                  name="role"
-                  value="artisan"
-                  checked={role === 'artisan'}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-                <span className="box">
-                  <span className="t">Artisan</span>
-                  <span className="s">Je propose mes services</span>
-                </span>
-              </label>
-            </div>
-          </fieldset>
 
           <div className="field-stack">
             <label className="fld">
@@ -121,7 +91,7 @@ export default function Connexion() {
           </div>
 
           <p className="auth-switch">
-            Pas encore de compte ? <a href="/inscription">S'inscrire</a>
+            {role === 'artisan' ? <>Vous souhaitez rejoindre Hartisan ? <a href="/pro#conseiller">Contacter un conseiller</a></> : <>Pas encore de compte ? <a href="/inscription">Vous inscrire</a></>}
           </p>
         </form>
       </div>
